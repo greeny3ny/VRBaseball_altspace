@@ -46,15 +46,14 @@
 	</a-assets>
 	
 	<a-mixin id="bat1" collada-model="#bat" collapse-model></a-mixin>
-    <a-mixin id="parent-to-right-hand" position="-0.10 -0.04 -0.15" rotation="90 225 90" scale="0.3 0.36 0.3" n-mesh-collider="type:object" n-skeleton-parent="part: hand; side: right;" sync sync-n-skeleton-parent></a-mixin> 
+    <a-mixin id="parent-to-right-hand" position="-0.10 -0.04 -0.15" rotation="90 225 90" scale="0.3 0.36 0.3" n-skeleton-parent="part: hand; side: right;" sync sync-n-skeleton-parent></a-mixin> 
 	<a-entity position="31 2.1 2" mixin="bat1" rotation="180 0 0" scale="0.3 0.36 0.3" instantiator="on: click;group:bat1; mixin: bat1 parent-to-right-hand"></a-entity>
 	
 	<!-- disabled while testing so i dont get sick of song -->
-	
+
 	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
-	
-	
+
 	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0">
 		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
 		<a-entity position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : 0 Runs ;'></a-entity>
@@ -66,7 +65,7 @@
 	<a-plane n-mesh-collider="type:environment; convex: false" position="0, 0, 0" width="500" height="500" color="#0FD" rotation="-90 0 0"></a-plane>
 	
 	<!-- baseball -->
-	<a-entity position="38 2 0" n-spawner='res: interactables/basketball'></a-entity>
+	<a-entity position="38 3 0" n-spawner='res: interactables/basketball'></a-entity>
 	
 	<!-- baseball bat -->
 	<a-entity n-mesh-collider="type:environment; convex: false" position="2 1 2" rotation="0 0 0" scale="0.1 0.16 0.1" collada-model="#bat"></a-entity>

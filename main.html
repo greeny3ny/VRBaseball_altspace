@@ -121,12 +121,12 @@
 			<a-box n-mesh-collider="type:hologram" color="white" position="52, 1.1, 0" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base2 -->
 			<a-box n-mesh-collider="type:hologram" color="white" position="42, 1.1, -10" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base3 -->
 			
-			<a-box id="home_collider" n-mesh-collider="type:hologram" color="white" position="32, 3, 0" rotation="0 0 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- home collider-->
-			<a-box id="base1_collider" base_collision="box_id:1;" n-mesh-collider="type:hologram" color="white" position="42, 3, 10" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base1 collider -->
-			<a-box id="base2_collider" base_collision="box_id:2;" n-mesh-collider="type:hologram" color="white" position="52, 3, 0" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base2 collider -->
-			<a-box id="base3_collider" base_collision="box_id:3;" n-mesh-collider="type:hologram" color="white" position="42, 3, -10" rotation="0 45 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- base3 collider -->
-
-		
+			 
+			<a-box id="home_collider" n-box-collider="isTrigger: true" n-container="capacity: 1" base_collision="box_id:0;"n-mesh-collider="type:hologram" color="white" position="32, 3, 0" rotation="0 0 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- home collider-->
+			<a-box id="base1_collider" n-box-colliser="isTrigger: true" n-container="capacity: 1" base_collision="box_id:1;" n-mesh-collider="type:hologram" color="white" position="42, 3, 10" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base1 collider -->
+			<a-box id="base2_collider" n-box-collider="isTrigger: true" n-container="capacity: 1" base_collision="box_id:2;" n-mesh-collider="type:hologram" color="white" position="52, 3, 0" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base2 collider -->
+			<a-box id="base3_collider" n-box-collider="isTrigger: true" n-container="capacity: 1" base_collision="box_id:3;" n-mesh-collider="type:hologram" color="white" position="42, 3, -10" rotation="0 45 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- base3 collider -->
+      
 		<!-- borders -->
 		<a-entity class="outside_walls" scale="1 1 1">
 			<a-box n-mesh-collider="type:environment" color="grey" position="6, 1, 0" rotation="0 0 0" scale="1 1 30"></a-box>
@@ -134,7 +134,12 @@
 			<a-box n-mesh-collider="type:environment" color="yellow" position="31, 1, -25" rotation="0 90 0" scale="1 1 30"></a-box>
 		</a-entity>
 		
-	
+		  <!-- homerun fireworks -->
+      <a-entity id="hr_firework" position="32 1 0" n-object='res: effects/fireworks' begin='HR'></a-entity>
+   
+		<a-box id="homerun1" scale="1 1 1" color="red" position="36 2 0">
+			<a-animation attribute="rotation" dur="1500" to="0 360 0" begin="homeRun" easing="ease" repeat="0" sync sync-transform></a-animation>
+		</a-box>
 	<!--https://video-jukebox.firebaseapp.com/-->
 	
 
@@ -190,6 +195,8 @@ AFRAME.registerComponent('base_collision',
   {
     var self = this;
     var object = self.el.object3D;
+	
+	var last_base = 0;
 
     object.addBehavior(new altspace.utilities.behaviors.JointCollisionEvents
                        ({
@@ -203,12 +210,28 @@ AFRAME.registerComponent('base_collision',
     {
 		if(self.data.box_id == 1){
 			base1.setAttribute('color', '#FFFF00');
+			if (last_base == 0){
+				last_base = 1;
+			}
 		}
 		else if(self.data.box_id == 2){
 			base2.setAttribute('color', '#FFFF00');
+			if (last_base == 1){
+				last_base = 2;
+			}
 		}
 		else if(self.data.box_id == 3){
 			base3.setAttribute('color', '#FFFF00');
+			if (last_base == 2){
+				last_base = 3;
+			}
+		}
+		
+		if(self.data.box_id == 0){
+			if (last_base == 3){
+				last_base = 0;
+				document.querySelector('#homerun1').emit('homeRun');
+			}
 		}
     }
 
@@ -223,6 +246,9 @@ AFRAME.registerComponent('base_collision',
     }
   }
 });
+
+
+
 
 </script>
 

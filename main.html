@@ -40,7 +40,7 @@
 <a-scene altspace="fullspace:true" sync-system='app: theater; author: greeny3ny'>
 	
 	<!-- assets -->
-	<!--<a-assets>
+	<a-assets>
 		<a-asset-item id="bat" src="https://greeny3ny.github.io/VRBaseball_altspace/models/baseballbat.dae"></a-asset-item>
 		<img id="board1" src="https://greeny3ny.github.io/VRBaseball_altspace/images/board1.png">
 	</a-assets>
@@ -50,10 +50,10 @@
 	<a-entity position="31 2.1 2" mixin="bat1" rotation="180 0 0" scale="0.3 0.36 0.3" instantiator="on: click;group:bat1; mixin: bat1 parent-to-right-hand"></a-entity>
 	
 	<!-- disabled while testing so i dont get sick of song -->
-	<!--
+	
 	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
-	-->
+	
 	
 	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0">
 		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>

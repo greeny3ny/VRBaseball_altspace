@@ -42,6 +42,7 @@
 	<!-- assets -->
 	<a-assets>
 		<a-asset-item id="bat" src="https://greeny3ny.github.io/VRBaseball_altspace/models/baseballbat.dae"></a-asset-item>
+		<img id="board1" src="https://greeny3ny.github.io/VRBaseball_altspace/images/board1.png">
 	</a-assets>
 	
 	<a-mixin id="bat1" collada-model="#bat" collapse-model></a-mixin>
@@ -49,9 +50,18 @@
 	<a-entity position="31 2.1 2" mixin="bat1" rotation="180 0 0" scale="0.3 0.36 0.3" instantiator="on: click;group:bat1; mixin: bat1 parent-to-right-hand"></a-entity>
 	
 	<!-- disabled while testing so i dont get sick of song -->
+	<!--
 	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
+	-->
 	
+	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0">
+		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
+		<a-entity position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : 0 Runs ;'></a-entity>
+		<a-entity position='90 13 0' rotation='0 -90 0' n-text='text: Blue Team : 0 Runs ;'></a-entity>
+		<a-box position='92 14 0' color="black" scale="0.1 20 20"></a-box>
+		<a-image src="#board1" position="91 15 0" rotation="0 90 0" scale="20 20"></a-image>
+	</a-entity>
 	<!-- ground -->
 	<a-plane n-mesh-collider="type:environment; convex: false" position="0, 0, 0" width="500" height="500" color="#0FD" rotation="-90 0 0"></a-plane>
 	
@@ -80,14 +90,14 @@
 		<!-- shift 10 -->
 		
 		<!-- field -->
-		<a-box n-mesh-collider="type:environment" color="#1F4" position="50.9, 1, 0" rotation="0 0 0" scale="42 1 49"></a-box> <!-- baseplate -->
+		<a-box n-mesh-collider="type:environment" color="#1F4" position="48.9, 1, 0" rotation="0 0 0" scale="45 1 49"></a-box> <!-- baseplate -->
 		<a-cylinder n-mesh-collider="type:environment" color="#1F4" height="1" radius="25" position="67 1 0"></a-cylinder> <!-- outfield -->
 		<a-cylinder color="#c48f70" height="1" radius="14" position="45 1.002 0"></a-cylinder> <!-- infield -->
 		
 		<!-- used to make it look like actual baseball field -->
 		<a-box color="#1F4" position="42 1 0" rotation="0 45 0" scale="13 1.01 13"></a-box> 
-		<a-box color="#1F4" position="38.5 1 11" rotation="0 45 0" scale="4 1.03 20"></a-box>
-		<a-box color="#1F4" position="38.5 1 -11" rotation="0 -45 0" scale="4 1.03 20"></a-box>
+		<a-box color="#1F4" position="38.5 1 11" rotation="0 45 0" scale="4 1.03 22"></a-box>
+		<a-box color="#1F4" position="38.5 1 -11" rotation="0 -45 0" scale="4 1.03 22"></a-box>
 		
 		<!-- diamond -->
 			<a-box n-mesh-collider="type:hologram" color="white" position="32, 1.1, 0" rotation="0 0 0" scale="1 1 1"></a-box> <!-- home -->
@@ -108,9 +118,14 @@
 			<a-cylinder color="#c48f70" height="1" radius="2" position="42 1.01 10"></a-cylinder> <!-- base1 dirt -->
 			<a-cylinder color="#c48f70" height="1" radius="2" position="42 1.01 -10"></a-cylinder> <!-- base3 dirt -->
 			
-			<a-box n-mesh-collider=""type:hologram" color="white" position="42, 1.1, 10" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base1 -->
-			<a-box n-mesh-collider=""type:hologram" color="white" position="52, 1.1, 0" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base2 -->
-			<a-box n-mesh-collider=""type:hologram" color="white" position="42, 1.1, -10" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base3 -->
+			<a-box n-mesh-collider="type:hologram" color="white" position="42, 1.1, 10" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base1 -->
+			<a-box n-mesh-collider="type:hologram" color="white" position="52, 1.1, 0" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base2 -->
+			<a-box n-mesh-collider="type:hologram" color="white" position="42, 1.1, -10" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base3 -->
+			
+			<a-box id="home_collider" n-mesh-collider="type:hologram" color="white" position="32, 3, 0" rotation="0 0 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- home collider-->
+			<a-box id="base1_collider" base_collision="box_id:1;" n-mesh-collider="type:hologram" color="white" position="42, 3, 10" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base1 collider -->
+			<a-box id="base2_collider" base_collision="box_id:2;" n-mesh-collider="type:hologram" color="white" position="52, 3, 0" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base2 collider -->
+			<a-box id="base3_collider" base_collision="box_id:3;" n-mesh-collider="type:hologram" color="white" position="42, 3, -10" rotation="0 45 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- base3 collider -->
 
 		
 		<!-- borders -->
@@ -133,6 +148,82 @@
 
 //move document so baseball does not collide
 altspace.getDocument().then(function (document) { document.position.set(-50000, -50000, -50000); document.scale.set(0.001, 0.001, 0.001)});
+
+//init vars
+var scene = document.querySelector('a-scene');
+var base1 = document.createElement('a-box');
+var base2 = document.createElement('a-box');
+var base3 = document.createElement('a-box');
+
+//set attributes
+base1.setAttribute('scale', '3 3 3');
+base1.setAttribute('color','#FF00FF');
+base1.setAttribute('position', '95 28 11');
+
+base2.setAttribute('scale', '3 3 3');
+base2.setAttribute('color','#FF00FF');
+base2.setAttribute('position', '95 40 0');
+
+base3.setAttribute('scale', '3 3 3');
+base3.setAttribute('color','#FF00FF');
+base3.setAttribute('position', '95 28 -11');
+
+//add to scene
+scene.appendChild(base1);
+scene.appendChild(base2);
+scene.appendChild(base3);
+
+AFRAME.registerComponent('base_collision',
+                         {
+  schema: 
+  { 
+    jointCubeSize: {
+      type: 'float',
+      default: 0.275
+    },
+	box_id:
+	{
+		type: 'int'
+	}
+  },
+
+  init: function ()
+  {
+    var self = this;
+    var object = self.el.object3D;
+
+    object.addBehavior(new altspace.utilities.behaviors.JointCollisionEvents
+                       ({
+
+      joints: [['Head', 'Center', 0]], jointCubeSize: self.data.jointCubeSize
+
+    }));
+
+    object.addEventListener('jointcollisionenter', handleJoin);		
+    function handleJoin(event)
+    {
+		if(self.data.box_id == 1){
+			base1.setAttribute('color', '#FFFF00');
+		}
+		else if(self.data.box_id == 2){
+			base2.setAttribute('color', '#FFFF00');
+		}
+		else if(self.data.box_id == 3){
+			base3.setAttribute('color', '#FFFF00');
+		}
+    }
+
+
+    object.addEventListener('jointcollisionleave', handleLeave);
+    function handleLeave(event)
+    {
+			base1.setAttribute('color', '#FFFFFF');
+			base2.setAttribute('color', '#FFFFFF');
+			base3.setAttribute('color', '#FFFFFF');
+	
+    }
+  }
+});
 
 </script>
 

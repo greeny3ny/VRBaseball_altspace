@@ -56,17 +56,35 @@
 	-->
 	
 	<!-- scoreboard -->
-	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0">
+	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0" n-mesh-collider="type:hologram">
 		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
 		<a-entity position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : 0 Runs ;'></a-entity>
 		<a-entity position='90 13 0' rotation='0 -90 0' n-text='text: Blue Team : 0 Runs ;'></a-entity>
 		<a-box position='92 14 0' color="black" scale="0.1 20 20"></a-box>
+		
+		<a-box id="sb-base1" position='91 14 6' color="white" scale="2 2 2" sync sync-color>
+			<a-animation attribute="material.color" begin="basetouch" from="white" to="yellow" dur="1"></a-animation>
+			<a-animation attribute="material.color" begin="baseleft" from="yellow" to="white" dur="1"></a-animation>
+		</a-box> <!-- base1scoreboard -->
+		
 		<a-box id="sb-base2" position='91 20 0' color="white" scale="2 2 2" sync sync-color>
 			  <a-animation attribute="material.color" begin="basetouch" from="white" to="yellow" dur="1"></a-animation>
 			  <a-animation attribute="material.color" begin="baseleft" from="yellow" to="white" dur="1"></a-animation>
 		</a-box> <!-- base2scoreboard -->
+		
+		<a-box id="sb-base3" position='91 14 -6' color="white" scale="2 2 2" sync sync-color>
+			<a-animation attribute="material.color" begin="basetouch" from="white" to="yellow" dur="1"></a-animation>
+			<a-animation attribute="material.color" begin="baseleft" from="yellow" to="white" dur="1"></a-animation>
+		</a-box> <!-- base3scoreboard -->
+		
+		<a-box id="sb-base0" position='91 7 0' color="white" scale="2 2 2" sync sync-color>
+			  <a-animation attribute="material.color" begin="basetouch" from="white" to="yellow" dur="1"></a-animation>
+			  <a-animation attribute="material.color" begin="baseleft" from="yellow" to="white" dur="1"></a-animation>
+		</a-box> <!-- base0scoreboard -->
+		
 		<a-image src="#board1" position="91 15 0" rotation="0 90 0" scale="20 20"></a-image>
 	</a-entity>
+	
 	<!-- ground -->
 	<a-plane n-mesh-collider="type:environment; convex: false" position="0, 0, 0" width="500" height="500" color="#0FD" rotation="-90 0 0"></a-plane>
 	
@@ -128,10 +146,10 @@
 			<a-box n-mesh-collider="type:hologram" color="white" position="42, 1.1, -10" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base3 -->
 			
 			 
-			<a-box id="home_collider" n-box-collider="isTrigger: true" n-container="capacity: 1" base_collision="box_id:0;"n-mesh-collider="type:hologram" color="white" position="32, 3, 0" rotation="0 0 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- home collider-->
-			<a-box id="base1_collider" n-box-colliser="isTrigger: true" n-container="capacity: 1" base_collision="box_id:1;" n-mesh-collider="type:hologram" color="white" position="42, 3, 10" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base1 collider -->
-			<a-box id="base2_collider" n-box-collider="isTrigger: true" n-container="capacity: 1" base_collision="box_id:2;" n-mesh-collider="type:hologram" color="white" position="52, 3, 0" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base2 collider -->
-			<a-box id="base3_collider" n-box-collider="isTrigger: true" n-container="capacity: 1" base_collision="box_id:3;" n-mesh-collider="type:hologram" color="white" position="42, 3, -10" rotation="0 45 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- base3 collider -->
+			<a-box id="home_collider" base_collision="box_id:0;"n-mesh-collider="type:hologram" color="white" position="32, 3, 0" rotation="0 0 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- home collider-->
+			<a-box id="base1_collider" base_collision="box_id:1;" n-mesh-collider="type:hologram" color="white" position="42, 3, 10" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base1 collider -->
+			<a-box id="base2_collider" base_collision="box_id:2;" n-mesh-collider="type:hologram" color="white" position="52, 3, 0" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base2 collider -->
+			<a-box id="base3_collider" base_collision="box_id:3;" n-mesh-collider="type:hologram" color="white" position="42, 3, -10" rotation="0 45 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- base3 collider -->
       
 		<!-- borders -->
 		<a-entity class="outside_walls" scale="1 1 1">
@@ -144,10 +162,11 @@
 		
 		
 		  <!-- homerun fireworks -->
-      <a-entity id="hr_firework" position="32 1 0" n-object='res: effects/fireworks' begin='HR'></a-entity>
+        <a-entity id="hr_firework" position="32 1 0" n-object='res: effects/fireworks' wire='on:homeRun'></a-entity>
    
-		<a-box id="homerun1" scale="1 1 1" color="red" position="36 2 0">
-			<a-animation attribute="rotation" dur="1500" to="0 360 0" begin="homeRun" easing="ease" repeat="0" sync sync-transform></a-animation>
+		<a-box id="homerun1" scale="1 1 1" color="red" position="36 2 8" sync sync-color>
+			<a-animation attribute="material.color" dur="1500" from="red" to="green" begin="homeRun" easing="ease" repeat="0"></a-animation>
+			<!--<a-entity n-object='res: effects/fireworks'></a-entity>-->
 		</a-box>
 	<!--https://video-jukebox.firebaseapp.com/-->
 	
@@ -162,23 +181,7 @@
 altspace.getDocument().then(function (document) { document.position.set(-50000, -50000, -50000); document.scale.set(0.001, 0.001, 0.001)});
 //init vars
 var scene = document.querySelector('a-scene');
-var base1 = document.createElement('a-box');
-var base2 = document.createElement('a-box');
-var base3 = document.createElement('a-box');
-//set attributes
-base1.setAttribute('scale', '3 3 3');
-base1.setAttribute('color','#FF00FF');
-base1.setAttribute('position', '95 28 11');
-base2.setAttribute('scale', '3 3 3');
-base2.setAttribute('color','#FF00FF');
-base2.setAttribute('position', '95 40 0');
-base3.setAttribute('scale', '3 3 3');
-base3.setAttribute('color','#FF00FF');
-base3.setAttribute('position', '95 28 -11');
-//add to scene
-scene.appendChild(base1);
-//scene.appendChild(base2);
-scene.appendChild(base3);
+
 AFRAME.registerComponent('base_collision',
                          {
   schema: 
@@ -206,58 +209,56 @@ AFRAME.registerComponent('base_collision',
     function handleJoin(event)
     {
 	    
-	    	console.log(last_base);
-		console.log();
-	    
-		if(self.data.box_id == 1){
-			base1.setAttribute('color', '#FFFF00');
-			console.log("base 1 touched");
-			if (last_base == 0){
-				console.log("first base");
-				last_base = 1;
-			}
+	    if(self.data.box_id == 0){
+		
+			console.log('homerun');
+			document.querySelector('#sb-base0').emit('basetouch');
+			document.querySelector('#homerun1').emit('homeRun');
+			document.querySelector('#hr_firework').emit('homeRun');
+		
+		}
+		else if(self.data.box_id == 1){
+			
+			document.querySelector('#sb-base1').emit('basetouch');
+			
 		}
 		else if(self.data.box_id == 2){
-			base2.setAttribute('color', '#FFFF00');
-			console.log("base 2 touched");
-			
+		
 			document.querySelector('#sb-base2').emit('basetouch');
 			
-			if (last_base == 1){
-				console.log("second base");
-				last_base = 2;
-			}
 		}
 		else if(self.data.box_id == 3){
-			base3.setAttribute('color', '#FFFF00');
-			console.log("base 3 touched");
-			if (last_base == 2){
-				console.log("third base");
-				last_base = 3;
-			}
+			
+			document.querySelector('#sb-base3').emit('basetouch');
+			
 		}
 		
-		if(self.data.box_id == 0){
-			console.log("home base touched");
-			if (last_base == 3){
-				console.log("home run");
-				last_base = 0;
-				document.querySelector('#homerun1').emit('homeRun');
-			}
-		}
+		
     }// end function handle join
     object.addEventListener('jointcollisionleave', handleLeave);
     function handleLeave(event)
     {
-	
-			console.log('left base');
+			
+		if(self.data.box_id == 0){
+		
+			document.querySelector('#sb-base0').emit('baseleft');
+		
+		}
+		else if(self.data.box_id == 1){
+			
+			document.querySelector('#sb-base1').emit('baseleft');
+			
+		}
+		else if(self.data.box_id == 2){
+		
 			document.querySelector('#sb-base2').emit('baseleft');
 			
-			base1.setAttribute('color', '#FFFFFF');
-			base2.setAttribute('color', '#FFFFFF');
-			base3.setAttribute('color', '#FFFFFF');
-	    
-	    
+		}
+		else if(self.data.box_id == 3){
+			
+			document.querySelector('#sb-base3').emit('baseleft');
+			
+		}
 	
     }//end function handle leave
   }

@@ -213,6 +213,8 @@ AFRAME.registerComponent('base_collision',
 			console.log("base 1 touched");
 			if (last_base == 0){
 				console.log("first base");
+				console.log(last_base);
+				console.log();
 				last_base = 1;
 			}
 		}
@@ -221,6 +223,8 @@ AFRAME.registerComponent('base_collision',
 			console.log("base 2 touched");
 			if (last_base == 1){
 				console.log("second base");
+				console.log(last_base);
+				console.log();
 				last_base = 2;
 			}
 		}
@@ -229,6 +233,8 @@ AFRAME.registerComponent('base_collision',
 			console.log("base 3 touched");
 			if (last_base == 2){
 				console.log("third base");
+				console.log(last_base);
+				console.log();
 				last_base = 3;
 			}
 		}
@@ -237,11 +243,13 @@ AFRAME.registerComponent('base_collision',
 			console.log("home base touched");
 			if (last_base == 3){
 				console.log("home run");
+				console.log(last_base);
+				console.log();
 				last_base = 0;
 				document.querySelector('#homerun1').emit('homeRun');
 			}
 		}
-    }
+    }// end function handle join
 
 
     object.addEventListener('jointcollisionleave', handleLeave);
@@ -250,8 +258,10 @@ AFRAME.registerComponent('base_collision',
 			base1.setAttribute('color', '#FFFFFF');
 			base2.setAttribute('color', '#FFFFFF');
 			base3.setAttribute('color', '#FFFFFF');
+	    
+	    
 	
-    }
+    }//end function handle leave
   }
 });
 

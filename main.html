@@ -50,10 +50,10 @@
 	<a-entity position="31 2.1 2" mixin="bat1" rotation="180 0 0" scale="0.3 0.36 0.3" instantiator="on: click;group:bat1; mixin: bat1 parent-to-right-hand"></a-entity>
 	
 	<!-- disabled while testing so i dont get sick of song -->
-
+	<!--
 	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
-
+	-->
 	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0">
 		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
 		<a-entity position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : 0 Runs ;'></a-entity>
@@ -210,25 +210,33 @@ AFRAME.registerComponent('base_collision',
     {
 		if(self.data.box_id == 1){
 			base1.setAttribute('color', '#FFFF00');
+			console.log("base 1 touched");
 			if (last_base == 0){
+				console.log("first base");
 				last_base = 1;
 			}
 		}
 		else if(self.data.box_id == 2){
 			base2.setAttribute('color', '#FFFF00');
+			console.log("base 2 touched");
 			if (last_base == 1){
+				console.log("second base");
 				last_base = 2;
 			}
 		}
 		else if(self.data.box_id == 3){
 			base3.setAttribute('color', '#FFFF00');
+			console.log("base 3 touched");
 			if (last_base == 2){
+				console.log("third base");
 				last_base = 3;
 			}
 		}
 		
 		if(self.data.box_id == 0){
+			console.log("home base touched");
 			if (last_base == 3){
+				console.log("home run");
 				last_base = 0;
 				document.querySelector('#homerun1').emit('homeRun');
 			}

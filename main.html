@@ -372,6 +372,7 @@ redBox.addEventListener('cursordown', function(){
 	
 	altspace.getUser().then(function(user){
 		red_players.push(user.displayName);
+		loaded();
 	});
 	
 	//update database

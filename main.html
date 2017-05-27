@@ -31,8 +31,9 @@
         }
     });
   </script>
-	
-	<script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+
+ <!-- firebase -->
+<script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
 <script>
   // Initialize Firebase
   var config = {
@@ -75,7 +76,7 @@
 	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0" n-mesh-collider="type:hologram">
 		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
 		<a-entity id="redTeam-text" position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : ;'></a-entity>
-		<a-entity position='90 13 0' rotation='0 -90 0' n-text='text: Blue Team : 0 Runs ;'></a-entity>
+		<a-entity id="redTeam-players" position='90 13 0' rotation='0 -90 0' n-text='text: Red Players : '></a-entity>
 		
 		<a-box position='92 14 0' color="black" scale="0.1 20 20"></a-box>
 		
@@ -195,25 +196,47 @@ altspace.getDocument().then(function (document) { document.position.set(100, 100
 var scene = document.querySelector('a-scene');
 var last_base = 9; //used to work out if player has hit all 3 bases
 	
-var red_runs = 0; //somehow need to sync this value? (for players that join mid game)
+var red_runs; //red runs (synced using firebase)
+var red_names; //
+
 var fireworks = document.createElement('a-entity');
 				fireworks.setAttribute('position', '32, 2, 0');
 				fireworks.setAttribute('n-object', 'res:effects/fireworks');
-				
+	
+var red_players;
+var red_players_parsed;
+	
+//creates firebase reference
 var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");		
 
+//sets red_runs up with value from database
 myFirebaseRef.child("redTeam/runs").on("value", function(snapshot) {
-  console.log(snapshot.val());  // Alerts "San Francisco"
+  console.log(snapshot.val());
   red_runs = snapshot.val();
 });
+//sets red_runs up with value from database
+myFirebaseRef.child("redTeam/players").on("value", function(snapshot) {
 
-				
+  red_players = snapshot.val();
+  console.log("rp: " + red_players);
+
+});
+
 //used to end homerun fireworks
 function endFireworks(){
 	console.log("fireworks ended");
 	scene.remove(fireworks);
-}
+}//end endFireworks
 
+//updates scoreboard every 0.2 seconds
+setInterval(updateScoreBoard, 200);
+
+//make scoreboard more like baseball scoreboard?
+//updates scoreboard
+function updateScoreBoard(){
+	document.querySelector('#redTeam-text').setAttribute('n-text','text: Red Team: ' + red_runs + " Runs");
+	document.querySelector('#redTeam-players').setAttribute('n-text','text: Red Team: ' + red_players_parsed);
+}//end updateScoreBoard
 
 AFRAME.registerComponent('base_collision',
                          {
@@ -242,7 +265,7 @@ AFRAME.registerComponent('base_collision',
     function handleJoin(event)
     {
 	    
-		console.log(last_base);
+		//console.log(last_base);
 		
 	    if(self.data.box_id == 0){
 		
@@ -258,13 +281,16 @@ AFRAME.registerComponent('base_collision',
 				setTimeout(endFireworks, 6000);
 				
 				red_runs ++;
-				myFirebaseRef.set({
-					redTeam:{ 
-						runs: red_runs
-					}
-				});
-				document.querySelector('#redTeam-text').setAttribute('n-text','text: Red Team: ' + red_runs);
 				
+				//update firebase
+				myFirebaseRef.update({
+						redTeam: {
+						runs: red_runs,
+						players: red_players
+						}
+				});
+				
+				console.log("red runs = " + red_runs);
 				//get player, get team, add run
 				
 			}//end last_base
@@ -330,7 +356,6 @@ AFRAME.registerComponent('base_collision',
   }
 });
 
-
 var redMat = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
 var boxGeo = new THREE.BoxGeometry(1, 1, 1);
 var redBox = new THREE.Mesh(boxGeo, redMat);
@@ -342,16 +367,21 @@ redBox.position.set(0, 2, 0);
 
 redBox.addEventListener('cursordown', function(){
 	console.log("red team joined");
-		
-	altspace.getUser().then(function(user){
-		console.log(user.displayName);
-		players.push(user.displayName);
-	});	
+	//add player to team
+	//update team number value
 	
-	for (var i=0; i < players.length; i++){
-		p_test = " " + players[i];
-	}
-		
+	altspace.getUser().then(function(user){
+		red_players.push(user.displayName);
+	});
+	
+	//update database
+	myFirebaseRef.update({
+		redTeam: {
+		runs: red_runs,
+		players: red_players
+		}
+	});
+	
 });
 
 	sim.scene.add(redBox);

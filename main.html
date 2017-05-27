@@ -49,7 +49,7 @@
 	
 </head>
 	
-<body>
+<body onload="loaded()">
 
 <!-- set up the scene -->
 <a-scene altspace="fullspace:true" sync-system='app: baseball; author: greeny3ny'>
@@ -385,10 +385,12 @@ redBox.addEventListener('cursordown', function(){
 
 	sim.scene.add(redBox);
 
-
-
-//move document so baseball does not collide
+function loaded(){
+	//move document so baseball does not collide
 altspace.getDocument().then(function (document) { document.position.set(100, 100, 100); document.rotation.set(0, 90, 0);});
+}
+
+
 </script>
 
 

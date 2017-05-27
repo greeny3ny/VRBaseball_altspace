@@ -190,14 +190,7 @@ function endFireworks(){
 	console.log("fireworks ended");
 	scene.remove(fireworks);
 }
-altspace.getUser().then(function(user){
-	console.log(user.displayName);
-	
-	document.querySelector('#redTeam-text').setAttribute('n-text','text: Test ' + user.displayName);
-	
-});	
-	
-	
+
 AFRAME.registerComponent('base_collision',
                          {
   schema: 
@@ -304,9 +297,38 @@ AFRAME.registerComponent('base_collision',
     }//end function handle leave
   }
 });
+
+
+var redMat = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+var boxGeo = new THREE.BoxGeometry(1, 1, 1);
+var redBox = new THREE.Mesh(boxGeo, redMat);
+var sim = new altspace.utilities.Simulation();
+var players = [];
+var p_test = "";
+
+redBox.position.set(0, 2, 0);
+
+redBox.addEventListener('cursordown', function(){
+	console.log("red team joined");
+		
+	altspace.getUser().then(function(user){
+		console.log(user.displayName);
+		players.push(user.displayName);
+	});	
+	
+	for (var i=0; i < players.length; i++){
+		p_test = " " + players[i];
+	}
+	
+	document.querySelector('#redTeam-text').setAttribute('n-text','text: Players: ' + p_test);
+		
+});
+
+	sim.scene.add(redBox);
+
+
+
 </script>
 
 
 </html>
-Contact GitHub API Training Shop Blog About
-© 2017 GitHub, Inc. Terms Privacy Security 

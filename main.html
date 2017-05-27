@@ -161,15 +161,6 @@
 		  <!-- homerun fireworks -->
         <!--<a-entity id="hr_firework" position="32 1 0" n-object='res: effects/fireworks' wire='on:homeRun'></a-entity>
 		-->
-		<a-entity id="homerun-fireworks" position="32 1 0" n-mesh-collider="type:hologram">
-			<a-animation attribute="rotation" dur="1500" to="0 360 0" begin="score" easing="ease" repeat="0"></a-animation>
-			<!--<a-entity position="0 0 0" n-object="res:effects/fireworks"></a-entity> -->
-		</a-entity>
-   
-		<a-box id="homerun1" scale="1 1 1" color="red" position="36 2 8" sync sync-color>
-			<a-animation attribute="material.color" dur="1500" from="red" to="green" begin="homeRun" easing="ease" repeat="0"></a-animation>
-			<!--<a-entity n-object='res: effects/fireworks'></a-entity>-->
-		</a-box>
 		
 		<!-- homerun horn -->
 		<a-entity id="hornPC" sync="own-on:homerun" sync-n-sound n-sound="on:homerun; src:https://greeny3ny.github.io/VRBaseball_altspace/audio/horn1.ogg; volume: 0.1; loop: false; autoplay: false;" n-skeleton-parent="part: spine"></a-entity>
@@ -185,7 +176,7 @@
 
 <script>
 //move document so baseball does not collide
-altspace.getDocument().then(function (document) { document.position.set(-50000, -50000, -50000); document.scale.set(0.001, 0.001, 0.001)});
+altspace.getDocument().then(function (document) { document.position.set(0, 0, 0);});
 //init vars
 var scene = document.querySelector('a-scene');
 

@@ -405,7 +405,8 @@ redBox.addEventListener('cursordown', function(){
 
 function loaded(){
 	//move document so baseball does not collide
-altspace.getDocument().then(function (document) { document.position.set(100, 100, 100); document.rotation.set(0, 90, 0);}); 
+	altspace.getDocument().then(function (document) { document.position.set(100, 100, 100); document.rotation.set(0, 90, 0);});
+	console.log("document moved");
 }
 
 

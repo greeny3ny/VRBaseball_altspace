@@ -152,17 +152,18 @@
 			<a-box id="base3_collider" base_collision="box_id:3;" n-mesh-collider="type:hologram" color="white" position="42, 3, -10" rotation="0 45 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- base3 collider -->
       
 		<!-- borders -->
-		<a-entity class="outside_walls" scale="1 1 1">
+		
 			<a-box n-mesh-collider="type:environment" color="grey" position="6, 1, 0" rotation="0 0 0" scale="1 1 30"></a-box>
 			<a-box n-mesh-collider="type:environment" color="grey" position="11, 1, -20" rotation="0 -45 0" scale="1 1 14.142"></a-box>
 			<a-box n-mesh-collider="type:environment" color="yellow" position="31, 1, -25" rotation="0 90 0" scale="1 1 30"></a-box>
-		</a-entity>
-		
-		
-		
-		
+
 		  <!-- homerun fireworks -->
-        <a-entity id="hr_firework" position="32 1 0" n-object='res: effects/fireworks' wire='on:homeRun'></a-entity>
+        <!--<a-entity id="hr_firework" position="32 1 0" n-object='res: effects/fireworks' wire='on:homeRun'></a-entity>
+		-->
+		<a-entity id="homerun-fireworks" position="32 1 0" n-mesh-collider="type:hologram">
+			<a-animation attribute="rotation" dur="1500" to="0 360 0" begin="score" easing="ease" repeat="0"></a-animation>
+			<!--<a-entity position="0 0 0" n-object="res:effects/fireworks"></a-entity> -->
+		</a-entity>
    
 		<a-box id="homerun1" scale="1 1 1" color="red" position="36 2 8" sync sync-color>
 			<a-animation attribute="material.color" dur="1500" from="red" to="green" begin="homeRun" easing="ease" repeat="0"></a-animation>
@@ -182,6 +183,8 @@ altspace.getDocument().then(function (document) { document.position.set(-50000, 
 //init vars
 var scene = document.querySelector('a-scene');
 
+var last_base = 9; //used to work out if player has hit all 3 bases
+
 AFRAME.registerComponent('base_collision',
                          {
   schema: 
@@ -200,7 +203,7 @@ AFRAME.registerComponent('base_collision',
     var self = this;
     var object = self.el.object3D;
 	
-	var last_base = 0;
+	
     object.addBehavior(new altspace.utilities.behaviors.JointCollisionEvents
                        ({
       joints: [['Head', 'Center', 0]], jointCubeSize: self.data.jointCubeSize
@@ -209,29 +212,49 @@ AFRAME.registerComponent('base_collision',
     function handleJoin(event)
     {
 	    
+		console.log(last_base);
+		
 	    if(self.data.box_id == 0){
 		
-			console.log('homerun');
-			document.querySelector('#sb-base0').emit('basetouch');
-			document.querySelector('#homerun1').emit('homeRun');
-			document.querySelector('#hr_firework').emit('homeRun');
+			document.querySelector('#sb-base0').emit('basetouch'); //change board
 		
-		}
+			if (last_base == 3){ //if last base was base 3, then homerun
+				console.log('homerun');
+				document.querySelector('#homerun-fireworks').emit('homerun');
+				
+				
+			}//end last_base
+			
+			//KEEP THIS LAST
+			last_base = 0; //last base touched was home
+		}//end base0 
 		else if(self.data.box_id == 1){
 			
-			document.querySelector('#sb-base1').emit('basetouch');
+			document.querySelector('#sb-base1').emit('basetouch'); //change board
+
+			if (last_base == 0){ //if last base touched was home, the new last base is b1
+				last_base = 1;
+			}
 			
-		}
+		}//end base1
 		else if(self.data.box_id == 2){
 		
-			document.querySelector('#sb-base2').emit('basetouch');
+			document.querySelector('#sb-base2').emit('basetouch'); //change board
 			
-		}
+			if (last_base == 1){ //if last base touched was b1, the new last base is b2
+				last_base = 2;
+			}
+			
+		}//end base2
 		else if(self.data.box_id == 3){
 			
 			document.querySelector('#sb-base3').emit('basetouch');
 			
-		}
+			if (last_base == 2){ //if last base touched was b2, the new last base is b3
+				last_base = 3;
+			}
+			
+		}//end base3
 		
 		
     }// end function handle join

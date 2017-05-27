@@ -37,12 +37,13 @@
 <body>
 
 <!-- set up the scene -->
-<a-scene altspace="fullspace:true" sync-system='app: theater; author: greeny3ny'>
+<a-scene altspace="fullspace:true" sync-system='app: baseball; author: greeny3ny'>
 	
 	<!-- assets -->
 	<a-assets>
 		<a-asset-item id="bat" src="https://greeny3ny.github.io/VRBaseball_altspace/models/baseballbat.dae"></a-asset-item>
 		<img id="board1" src="https://greeny3ny.github.io/VRBaseball_altspace/images/board1.png">
+		<img id="floor1" src="https://greeny3ny.github.io/VRBaseball_altspace/images/floor1.png">
 	</a-assets>
 	
 	<a-mixin id="bat1" collada-model="#bat" collapse-model></a-mixin>
@@ -50,9 +51,10 @@
 	<a-entity position="31 2.1 2" mixin="bat1" rotation="180 0 0" scale="0.3 0.36 0.3" instantiator="on: click;group:bat1; mixin: bat1 parent-to-right-hand"></a-entity>
 	
 	<!-- disabled while testing so i dont get sick of song -->
+	
 	<!--
-	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
-	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
+	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
+	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	-->
 	
 	<!-- scoreboard -->
@@ -60,6 +62,7 @@
 		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
 		<a-entity position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : 0 Runs ;'></a-entity>
 		<a-entity position='90 13 0' rotation='0 -90 0' n-text='text: Blue Team : 0 Runs ;'></a-entity>
+		
 		<a-box position='92 14 0' color="black" scale="0.1 20 20"></a-box>
 		
 		<a-box id="sb-base1" position='91 14 6' color="white" scale="2 2 2" sync sync-color>
@@ -100,15 +103,11 @@
 		<!-- basic layout -->
 		
 		<!-- ramp -->
-		<!-- 3.162 = sqrt(10) , as looking for hyp of 3 along and 1 up = right angled triangle -->
-		<a-box n-mesh-collider="type:environment" color="blue" position="4, 1, 0" rotation="0 0 108.44" scale="0.0 3.162"></a-box>
+		<a-box n-mesh-collider="type:environment" color="blue" position="2.5, 0.5, 0" rotation="0 0 108.44" scale="0 6.325 5"></a-box>
 		
-		<!-- walls -->
-			<a-box n-mesh-collider="type:environment" color="red" position="6.5, 1, 0" rotation="0 0 0" scale="2 1 1"></a-box>
-			<a-box n-mesh-collider="type:environment" color="green" position="10.5, 1, 0" rotation="0 0 0" scale="6 1 1"></a-box>
-			<a-box n-mesh-collider="type:environment" color="red" position="13.6, 1, 0" rotation="0 0 0" scale="0.2 1 1"></a-box>
-			<a-box n-mesh-collider="type:environment" color="green" position="16.7, 1, 0" rotation="0 0 0" scale="6 1 1"></a-box>
-			<a-box n-mesh-collider="type:environment" color="red" position="19.8, 1, 0" rotation="0 0 0" scale="0.2 1 1"></a-box>
+		<!-- inside bit -->
+			<!--<a-box n-mesh-collider="type:environment" color="black" position="16.45, 1, 0" rotation="0 0 0" scale="19.9 1 50"></a-box> -->
+			<a-entity geometry="primitive: box" position='16.45 1 0' material="src:#floor1; repeat:1 1" scale="19.9 1 50" n-mesh-collider="type:environment"></a-entity>
 		
 		<!-- shift 10 -->
 		
@@ -153,9 +152,11 @@
       
 		<!-- borders -->
 		
-			<a-box n-mesh-collider="type:environment" color="grey" position="6, 1, 0" rotation="0 0 0" scale="1 1 30"></a-box>
-			<a-box n-mesh-collider="type:environment" color="grey" position="11, 1, -20" rotation="0 -45 0" scale="1 1 14.142"></a-box>
-			<a-box n-mesh-collider="type:environment" color="yellow" position="31, 1, -25" rotation="0 90 0" scale="1 1 30"></a-box>
+			<a-box n-mesh-collider="type:environment" color="grey" position="6, 0.5, 0" rotation="0 0 0" scale="1 2 30"></a-box>
+			<!--<a-box n-mesh-collider="type:environment" color="grey" position="11, 0.5, -20" rotation="0 -45 0" scale="1 2 14.142"></a-box>-->
+			<!--<a-box n-mesh-collider="type:environment" color="grey" position="11, 0.5, -20" rotation="0 -45 0" scale="1 2 14.142"></a-box>-->
+			<a-box n-mesh-collider="type:environment" color="green" position="50.4, 0.5, -25" rotation="0 90 0" scale="1 2 48"></a-box>
+			<a-box n-mesh-collider="type:environment" color="green" position="92.5, 0.5, 0" rotation="0 90 0" scale="1 2 1"></a-box>
 
 		  <!-- homerun fireworks -->
         <!--<a-entity id="hr_firework" position="32 1 0" n-object='res: effects/fireworks' wire='on:homeRun'></a-entity>
@@ -169,6 +170,11 @@
 			<a-animation attribute="material.color" dur="1500" from="red" to="green" begin="homeRun" easing="ease" repeat="0"></a-animation>
 			<!--<a-entity n-object='res: effects/fireworks'></a-entity>-->
 		</a-box>
+		
+		<!-- homerun horn -->
+		<a-entity id="hornPC" sync="own-on:homerun" sync-n-sound n-sound="on:homerun; src:https://greeny3ny.github.io/VRBaseball_altspace/audio/horn1.ogg; volume: 0.1; loop: false; autoplay: false;" n-skeleton-parent="part: spine"></a-entity>
+		<a-entity id="hornGEAR" sync="own-on:homerun" sync-n-sound n-sound="on:homerun; src:https://greeny3ny.github.io/VRBaseball_altspace/audio/horn1.mp3; volume: 0.1; loop: false; autoplay: false;" n-skeleton-parent="part: spine"></a-entity>
+		
 	<!--https://video-jukebox.firebaseapp.com/-->
 	
 
@@ -184,6 +190,16 @@ altspace.getDocument().then(function (document) { document.position.set(-50000, 
 var scene = document.querySelector('a-scene');
 
 var last_base = 9; //used to work out if player has hit all 3 bases
+
+var fireworks = document.createElement('a-entity');
+				fireworks.setAttribute('position', '32, 2, 0');
+				fireworks.setAttribute('n-object', 'res:effects/fireworks');
+
+//used to end homerun fireworks
+function endFireworks(){
+	console.log("fireworks ended");
+	scene.remove(fireworks);
+}
 
 AFRAME.registerComponent('base_collision',
                          {
@@ -221,7 +237,13 @@ AFRAME.registerComponent('base_collision',
 			if (last_base == 3){ //if last base was base 3, then homerun
 				console.log('homerun');
 				document.querySelector('#homerun-fireworks').emit('homerun');
+				document.querySelector('#hornGEAR').emit('homerun');
+				document.querySelector('#hornPC').emit('homerun');
 				
+				scene.appendChild(fireworks);
+				setTimeout(endFireworks, 6000);
+				
+				//get player, get team, add run
 				
 			}//end last_base
 			

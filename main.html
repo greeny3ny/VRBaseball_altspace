@@ -69,8 +69,8 @@
 	<!-- disabled while testing so i dont get sick of song -->
 	
 	
-	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/123.ogg; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
-	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/123.mp3; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
+	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
+	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	
 	
 	<!-- scoreboard -->
@@ -356,13 +356,14 @@ AFRAME.registerComponent('base_collision',
 });
 
 var redMat = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+	var red2Mat = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
 var boxGeo = new THREE.BoxGeometry(1, 1, 1);
 var redBox = new THREE.Mesh(boxGeo, redMat);
+var resetBox = new THREE.Mesh(boxGeo, red2Mat);
 var sim = new altspace.utilities.Simulation();
-var players = [];
-var p_test = "";
 
 redBox.position.set(0, 2, 0);
+resetBox.position.set(2, 2, 0);
 
 redBox.addEventListener('cursordown', function(){
 	console.log("red team joined");
@@ -382,8 +383,25 @@ redBox.addEventListener('cursordown', function(){
 	});
 	
 });
+	
+	resetBox.addEventListener('cursordown', function(){
+	console.log("red team joined");
+	//add player to team
+	//update team number value
+	red_players = [];
+	//update database
+	myFirebaseRef.set({
+		redTeam: {
+		runs: red_runs,
+		players: red_players
+		}
+	});
+	
+});
+
 
 	sim.scene.add(redBox);
+	sim.scene.add(resetBox);
 
 function loaded(){
 	//move document so baseball does not collide

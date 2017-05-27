@@ -65,6 +65,7 @@
     <a-mixin id="parent-to-right-hand" position="-0.10 -0.04 -0.15" rotation="90 225 90" scale="0.3 0.36 0.3" n-skeleton-parent="part: hand; side: right;" sync sync-n-skeleton-parent></a-mixin> 
 	<a-entity position="31 2.1 2" mixin="bat1" rotation="180 0 0" scale="0.3 0.36 0.3" instantiator="on: click;group:bat1; mixin: bat1 parent-to-right-hand"></a-entity>
 	
+	<a-entity position="31 2.1 -2" n-spawner="res: interactables/box"></a-entity> 
 	<!-- disabled while testing so i dont get sick of song -->
 	
 	

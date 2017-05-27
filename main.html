@@ -32,6 +32,20 @@
     });
   </script>
 	
+	<script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyB9uKPr2N6JxNo7D5tzh6L62Yt4NYt6fNo",
+    authDomain: "altspace-baseball.firebaseapp.com",
+    databaseURL: "https://altspace-baseball.firebaseio.com",
+    projectId: "altspace-baseball",
+    storageBucket: "altspace-baseball.appspot.com",
+    messagingSenderId: "628420188026"
+  };
+  firebase.initializeApp(config);
+</script>
+	
 </head>
 	
 <body>
@@ -185,11 +199,21 @@ var red_runs = 0; //somehow need to sync this value? (for players that join mid 
 var fireworks = document.createElement('a-entity');
 				fireworks.setAttribute('position', '32, 2, 0');
 				fireworks.setAttribute('n-object', 'res:effects/fireworks');
+				
+var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");		
+
+myFirebaseRef.child("redTeam/runs").on("value", function(snapshot) {
+  console.log(snapshot.val());  // Alerts "San Francisco"
+  red_runs = snapshot.val();
+});
+
+				
 //used to end homerun fireworks
 function endFireworks(){
 	console.log("fireworks ended");
 	scene.remove(fireworks);
 }
+
 
 AFRAME.registerComponent('base_collision',
                          {
@@ -232,6 +256,14 @@ AFRAME.registerComponent('base_collision',
 				
 				scene.appendChild(fireworks);
 				setTimeout(endFireworks, 6000);
+				
+				red_runs ++;
+				myFirebaseRef.set({
+					redTeam:{ 
+						runs: red_runs
+					}
+				});
+				document.querySelector('#redTeam-text').setAttribute('n-text','text: Red Team: ' + red_runs);
 				
 				//get player, get team, add run
 				
@@ -319,8 +351,6 @@ redBox.addEventListener('cursordown', function(){
 	for (var i=0; i < players.length; i++){
 		p_test = " " + players[i];
 	}
-	
-	document.querySelector('#redTeam-text').setAttribute('n-text','text: Players: ' + p_test);
 		
 });
 

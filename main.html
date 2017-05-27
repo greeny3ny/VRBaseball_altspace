@@ -60,7 +60,7 @@
 	<!-- scoreboard -->
 	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0" n-mesh-collider="type:hologram">
 		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
-		<a-entity position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : ;'></a-entity>
+		<a-entity id="redTeam-text" position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : ;'></a-entity>
 		<a-entity position='90 13 0' rotation='0 -90 0' n-text='text: Blue Team : 0 Runs ;'></a-entity>
 		
 		<a-box position='92 14 0' color="black" scale="0.1 20 20"></a-box>
@@ -179,23 +179,22 @@
 altspace.getDocument().then(function (document) { document.position.set(100, 100, 100); document.rotation.set(0, 90, 0);});
 //init vars
 var scene = document.querySelector('a-scene');
-
 var last_base = 9; //used to work out if player has hit all 3 bases
 	
 var red_runs = 0; //somehow need to sync this value? (for players that join mid game)
-
 var fireworks = document.createElement('a-entity');
 				fireworks.setAttribute('position', '32, 2, 0');
 				fireworks.setAttribute('n-object', 'res:effects/fireworks');
-
 //used to end homerun fireworks
 function endFireworks(){
 	console.log("fireworks ended");
 	scene.remove(fireworks);
 }
-
 altspace.getUser().then(function(user){
 	console.log(user.displayName);
+	
+	document.querySelector('#redTeam-text').setAttribute('n-text','text: Test ' + user.displayName);
+	
 });	
 	
 	
@@ -251,7 +250,6 @@ AFRAME.registerComponent('base_collision',
 		else if(self.data.box_id == 1){
 			
 			document.querySelector('#sb-base1').emit('basetouch'); //change board
-
 			if (last_base == 0){ //if last base touched was home, the new last base is b1
 				last_base = 1;
 			}
@@ -310,3 +308,5 @@ AFRAME.registerComponent('base_collision',
 
 
 </html>
+Contact GitHub API Training Shop Blog About
+© 2017 GitHub, Inc. Terms Privacy Security 

@@ -191,8 +191,6 @@
 </body>
 
 <script>
-//move document so baseball does not collide
-altspace.getDocument().then(function (document) { document.position.set(100, 100, 100); document.rotation.set(0, 90, 0);});
 //init vars
 var scene = document.querySelector('a-scene');
 var last_base = 9; //used to work out if player has hit all 3 bases
@@ -389,6 +387,8 @@ redBox.addEventListener('cursordown', function(){
 
 
 
+//move document so baseball does not collide
+altspace.getDocument().then(function (document) { document.position.set(100, 100, 100); document.rotation.set(0, 90, 0);});
 </script>
 
 

@@ -54,11 +54,17 @@
 	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.25; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	-->
+	
+	<!-- scoreboard -->
 	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0">
 		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
 		<a-entity position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : 0 Runs ;'></a-entity>
 		<a-entity position='90 13 0' rotation='0 -90 0' n-text='text: Blue Team : 0 Runs ;'></a-entity>
 		<a-box position='92 14 0' color="black" scale="0.1 20 20"></a-box>
+		<a-box id="sb-base2" position='91 20 0' color="white" scale="2 2 2" sync sync-color>
+			  <a-animation attribute="material.color" begin="basetouch" from="white" to="yellow" dur="1"></a-animation>
+			  <a-animation attribute="material.color" begin="baseleft" from="yellow" to="white" dur="1"></a-animation>
+		</a-box> <!-- base2scoreboard -->
 		<a-image src="#board1" position="91 15 0" rotation="0 90 0" scale="20 20"></a-image>
 	</a-entity>
 	<!-- ground -->
@@ -134,6 +140,9 @@
 			<a-box n-mesh-collider="type:environment" color="yellow" position="31, 1, -25" rotation="0 90 0" scale="1 1 30"></a-box>
 		</a-entity>
 		
+		
+		
+		
 		  <!-- homerun fireworks -->
       <a-entity id="hr_firework" position="32 1 0" n-object='res: effects/fireworks' begin='HR'></a-entity>
    
@@ -149,34 +158,27 @@
 </body>
 
 <script>
-
 //move document so baseball does not collide
 altspace.getDocument().then(function (document) { document.position.set(-50000, -50000, -50000); document.scale.set(0.001, 0.001, 0.001)});
-
 //init vars
 var scene = document.querySelector('a-scene');
 var base1 = document.createElement('a-box');
 var base2 = document.createElement('a-box');
 var base3 = document.createElement('a-box');
-
 //set attributes
 base1.setAttribute('scale', '3 3 3');
 base1.setAttribute('color','#FF00FF');
 base1.setAttribute('position', '95 28 11');
-
 base2.setAttribute('scale', '3 3 3');
 base2.setAttribute('color','#FF00FF');
 base2.setAttribute('position', '95 40 0');
-
 base3.setAttribute('scale', '3 3 3');
 base3.setAttribute('color','#FF00FF');
 base3.setAttribute('position', '95 28 -11');
-
 //add to scene
 scene.appendChild(base1);
-scene.appendChild(base2);
+//scene.appendChild(base2);
 scene.appendChild(base3);
-
 AFRAME.registerComponent('base_collision',
                          {
   schema: 
@@ -190,21 +192,16 @@ AFRAME.registerComponent('base_collision',
 		type: 'int'
 	}
   },
-
   init: function ()
   {
     var self = this;
     var object = self.el.object3D;
 	
 	var last_base = 0;
-
     object.addBehavior(new altspace.utilities.behaviors.JointCollisionEvents
                        ({
-
       joints: [['Head', 'Center', 0]], jointCubeSize: self.data.jointCubeSize
-
     }));
-
     object.addEventListener('jointcollisionenter', handleJoin);		
     function handleJoin(event)
     {
@@ -223,6 +220,9 @@ AFRAME.registerComponent('base_collision',
 		else if(self.data.box_id == 2){
 			base2.setAttribute('color', '#FFFF00');
 			console.log("base 2 touched");
+			
+			document.querySelector('#sb-base2').emit('basetouch');
+			
 			if (last_base == 1){
 				console.log("second base");
 				last_base = 2;
@@ -246,11 +246,13 @@ AFRAME.registerComponent('base_collision',
 			}
 		}
     }// end function handle join
-
-
     object.addEventListener('jointcollisionleave', handleLeave);
     function handleLeave(event)
     {
+	
+			console.log('left base');
+			document.querySelector('#sb-base2').emit('baseleft');
+			
 			base1.setAttribute('color', '#FFFFFF');
 			base2.setAttribute('color', '#FFFFFF');
 			base3.setAttribute('color', '#FFFFFF');
@@ -260,10 +262,6 @@ AFRAME.registerComponent('base_collision',
     }//end function handle leave
   }
 });
-
-
-
-
 </script>
 
 

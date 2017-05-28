@@ -68,16 +68,14 @@
 	<a-entity position="31 2.1 -2" n-spawner="res: interactables/box"></a-entity> 
 	<!-- disabled while testing so i dont get sick of song -->
 	
-
 	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
-
 	
 	<!-- scoreboard -->
 	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0" n-mesh-collider="type:hologram">
 		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
 		<a-entity id="redTeam-text" position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : ;'></a-entity>
-		<a-entity id="redTeam-players" position='90 13 0' rotation='0 -90 0' n-text='text: Red Players : '></a-entity>
+		<a-entity id="redTeam-players" position='90 16 15' rotation='0 -90 0' n-text='text: Red Players : ; height:0.1;' ></a-entity>
 		
 		<a-box position='92 14 0' color="black" scale="0.1 20 20"></a-box>
 		
@@ -194,10 +192,11 @@
 //init vars
 var scene = document.querySelector('a-scene');
 var last_base = 9; //used to work out if player has hit all 3 bases
-	
+
+var user; //stores username
+
 var red_runs; //red runs (synced using firebase)
 var red_names; //
-
 var fireworks = document.createElement('a-entity');
 				fireworks.setAttribute('position', '32, 2, 0');
 				fireworks.setAttribute('n-object', 'res:effects/fireworks');
@@ -207,35 +206,66 @@ var red_players_parsed;
 	
 //creates firebase reference
 var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");		
-
 //sets red_runs up with value from database
 myFirebaseRef.child("redTeam/runs").on("value", function(snapshot) {
   console.log(snapshot.val());
   red_runs = snapshot.val();
 });
 //sets red_runs up with value from database
-myFirebaseRef.child("redTeam/players").on("value", function(snapshot) {
 
+function readPlayers(){
+myFirebaseRef.child("redTeam/players").on("value", function(snapshot) {
   red_players = snapshot.val();
   console.log("rp: " + red_players);
-
 });
+}//end read players
+
+readPlayers();
 
 //used to end homerun fireworks
 function endFireworks(){
 	console.log("fireworks ended");
 	scene.remove(fireworks);
 }//end endFireworks
-
 //updates scoreboard every 0.2 seconds
 setInterval(updateScoreBoard, 200);
 
 //make scoreboard more like baseball scoreboard?
+var red_parsed = false;
+var red_text = [];
 //updates scoreboard
 function updateScoreBoard(){
 	document.querySelector('#redTeam-text').setAttribute('n-text','text: Red Team: ' + red_runs + " Runs");
-	document.querySelector('#redTeam-players').setAttribute('n-text','text: Red Team: ' + red_players_parsed);
+	
+	if(red_parsed == false){
+		displayRedTeam();
+		red_parsed=true; //disabled atm
+	}
+	
+	//document.querySelector('#redTeam-players').setAttribute('n-text','width:4 ; text: Red Team: ' + red_players);
 }//end updateScoreBoard
+
+function displayRedTeam(){
+
+	//REALLY inefficient way of doing it, but should work with most names
+	//console.log("displaying red team")
+	if (red_players.length > 0){
+	
+		for (var i=0; i < red_players.length; i++){
+			var temp = document.createElement('a-entity');
+			temp.setAttribute('position','95 '+ (30-(2*i)) +' 30');
+			temp.setAttribute('n-text', "text: " + red_players[i]);
+			temp.setAttribute('rotation', '0 -90 0');
+			temp.setAttribute('scale', '2 2 2');
+			scene.appendChild(temp);
+			red_text.push(temp);
+		}
+		//doesnt work?
+		for (var i=0; i < red_players.length; i++){
+			scene.remove(red_text[i]);
+		}	
+	}
+}
 
 AFRAME.registerComponent('base_collision',
                          {
@@ -354,42 +384,47 @@ AFRAME.registerComponent('base_collision',
     }//end function handle leave
   }
 });
-
 var redMat = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-	var red2Mat = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+var red2Mat = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
 var boxGeo = new THREE.BoxGeometry(1, 1, 1);
 var redBox = new THREE.Mesh(boxGeo, redMat);
 var resetBox = new THREE.Mesh(boxGeo, red2Mat);
 var sim = new altspace.utilities.Simulation();
-
 redBox.position.set(0, 2, 0);
 resetBox.position.set(2, 2, 0);
 
+var clicked = false;
 redBox.addEventListener('cursordown', function(){
-	console.log("red team joined");
-	//add player to team
+
+	red_parsed = false;
 	//update team number value
 	
-	altspace.getUser().then(function(user){
-		red_players.push(user.displayName);
-		loaded();
-	});
+	//only adds player once
+	if (clicked == false){
+		console.log("red team joined");
+		red_players.push(user); //adds player to redteam
+		clicked = true; //only adds name once
+	}
 	
 	//update database
 	myFirebaseRef.update({
 		redTeam: {
-		runs: red_runs,
-		players: red_players
+			runs: red_runs,
+			players: red_players
 		}
 	});
 	
 });
+
+//temporary?	
+resetBox.addEventListener('cursordown', function(){
+	console.log("reset");
+	clicked = false; //reset clicked value
 	
-	resetBox.addEventListener('cursordown', function(){
-	console.log("red team joined");
-	//add player to team
-	//update team number value
+	//reset players value to default "tim"
 	red_players = ["tim"];
+	red_parsed = false;
+	
 	//update database
 	myFirebaseRef.set({
 		redTeam: {
@@ -398,19 +433,26 @@ redBox.addEventListener('cursordown', function(){
 		}
 	});
 	
+	for (var i=0; i < red_players.length; i++){
+			scene.remove(red_text[i]);
+		}	
+	
+	readPlayers();
+	
 });
-
-
 	sim.scene.add(redBox);
 	sim.scene.add(resetBox);
-
+	
 function loaded(){
 	//move document so baseball does not collide
+	altspace.getUser().then(function(user1){
+		user = user1.displayName;
+		console.log(user1 + " joined redteam");	
+	});
+	
 	altspace.getDocument().then(function (document) { document.position.set(100, 100, 100); document.rotation.set(0, 90, 0);});
-	console.log("document moved");
+	console.log("loaded");
 }
-
-
 </script>
 
 

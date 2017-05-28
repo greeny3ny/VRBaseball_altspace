@@ -556,6 +556,8 @@ sim.scene.add(resetBox);
 sim.scene.add(leaveTeamBox);
 
 loaded();
+
+console.log("Version 0.1");
 //does this function once everything has loaded in
 function loaded(){
 	//move document so baseball does not collide
@@ -566,7 +568,6 @@ function loaded(){
 	
 	altspace.getDocument().then(function (document) { document.position.set(100, 100, 100); document.rotation.set(0, 90, 0);});
 	console.log("loaded");
-	console.log("Version 0.1");
 }
 </script>
 

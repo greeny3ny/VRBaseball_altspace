@@ -65,44 +65,58 @@
 	
 	<!-- bat pickup -->
 	<a-mixin id="bat1" collada-model="#bat" collapse-model></a-mixin>
-	<a-mixin id="blue_shirt1" collada-model="#blue_shirt" scale="1.2 1 1.2" collapse-model></a-mixin>
-	<a-mixin id="red_shirt1" collada-model="#red_shirt" scale="1.2 1 1.2" collapse-model></a-mixin>
-   	<a-mixin id="parent-to-right-hand" position="-0.10 -0.04 -0.15" rotation="90 225 90" scale="0.3 0.36 0.3" n-skeleton-parent="part: hand; side: right;" sync sync-n-skeleton-parent></a-mixin>
-	<a-mixin id="parent-to-chest" position="-0.2 0.3 0" n-skeleton-parent="part: spine;" scale="1 1 1" sync sync-n-skeleton-parent></a-mixin>
+	<a-mixin id="blue_shirt1" collada-model="#blue_shirt" collapse-model></a-mixin>
+	<a-mixin id="red_shirt1" collada-model="#red_shirt" collapse-model></a-mixin>
+    <a-mixin id="parent-to-right-hand" position="-0.10 -0.04 -0.15" rotation="90 225 90" scale="0.3 0.36 0.3" n-skeleton-parent="part: hand; side: right;" sync sync-n-skeleton-parent></a-mixin>
+	<a-mixin id="parent-to-chest" position="-0.24 0.3 0" n-skeleton-parent="part: spine;" scale="1.1 1 1.1" sync sync-n-skeleton-parent></a-mixin>
 	<a-entity position="31 2.1 2" mixin="bat1" rotation="180 0 0" scale="0.3 0.36 0.3" instantiator="on: click;group:bat1; mixin: bat1 parent-to-right-hand"></a-entity>
-	<a-entity position="31 2.1 -5" mixin="blue_shirt1" rotation="0 0 0" scale="1 1 1" instantiator="on: click;group:blue_shirt1; mixin: blue_shirt1 parent-to-chest"></a-entity>
-	<a-entity position="31 2.1 -3" mixin="red_shirt1" rotation="0 0 0" scale="1 1 1" instantiator="on: click;group:red_shirt1; mixin: red_shirt1 parent-to-chest"></a-entity>
+	
+	
 	
 	<!-- temporary bat (just a box)-->
 	<a-entity position="31 2.1 -2" n-spawner="res: interactables/box"></a-entity> 
 	
 	
 	<!-- disabled while testing so i dont get sick of song -->
-	
-	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
-	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
+	<!--
+	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.1; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
+	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.1; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
+	-->
 	
 	<!-- temporary text -->
 	<a-entity position='0 0.5 1.45' rotation='0 180 0' n-text='text: Stop Music ; fontSize:3; width:1;'></a-entity> <!-- stop music text -->
 	<a-entity position='-1 0.5 1.45' rotation='0 180 0' n-text='text: Reset Teams ; fontSize:3; width:1;'></a-entity> <!-- reset teams text -->
-	<a-entity position='-2 0.5 1.45' rotation='0 180 0' n-text='text: Join Red Team ; fontSize:3; width:1;'></a-entity> <!-- red team join text -->
-	<a-entity position='-2 1.5 1.45' rotation='0 180 0' n-text='text: Join Blue Team ; fontSize:3; width:1;'></a-entity> <!-- blue team join text -->
-	<a-entity position='-3 0.5 1.45' rotation='0 180 0' n-text='text: Leave Current Team ; fontSize:3; width:1;'></a-entity> <!-- leave team text -->
+	<a-entity position='19.45 2 5' rotation='0 -90 0' n-text='text: Join The RecRoom Kids ; fontSize:2; width:1;'></a-entity> <!-- red team join text -->
+	<a-entity position='19.45 2 -5' rotation='0 -90 0' n-text='text: Join The Altspace Angels ; fontSize:2; width:1;'></a-entity> <!-- blue team join text -->
+	<a-entity position='19.45 2 0' rotation='0 -90 0' n-text='text: Leave Current Team ; fontSize:3; width:1;'></a-entity> <!-- leave team text -->
 	
 	<a-entity position='31 2.5 -2' rotation='0 -90 0' n-text='text: Temporary Bat ; fontSize:2; width:1;'></a-entity> <!-- temp text -->
 	<!-- temp text end -->
+	
+	<!-- shirt displays -->
+	<a-entity collada-model="#blue_shirt" position='20 3 -5' rotation='0 0 0' scale = "1.2 1.2 1.2" >
+		<a-animation attribute="rotation" dur="10000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
+	</a-entity> 
+	<a-entity collada-model="#red_shirt" position='20 3 5' rotation='0 0 0' scale = "1.2 1.2 1.2" >
+		<a-animation attribute="rotation" dur="10000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
+	</a-entity> 
+	
+	<a-entity id="s_blue" position="20 2 -5" rotation="0 0 0" scale="1 1 1" instantiator="on: equip_s;group:blue_shirt1; mixin: blue_shirt1 parent-to-chest"></a-entity>
+	<a-entity id="s_red"position="20 2 5" rotation="0 0 0" scale="1 1 1" instantiator="on: equip_s;group:red_shirt1; mixin: red_shirt1 parent-to-chest"></a-entity>
+	<!-- shirt displays end -->
+	
 	
 	<!-- scoreboard -->
 	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0" n-mesh-collider="type:hologram">
 		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
 		
 		<!-- red team text -->
-		<a-entity id="redTeam-text" position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : ;'></a-entity>
-		<a-entity id="redTeam-players" position='90 16 15' rotation='0 -90 0' n-text='text: Red Players : ;' ></a-entity>
+		<a-entity id="redTeam-text" position='90 20 15' rotation='0 -90 0' n-text='text: RecRoom Kids Score : ;'></a-entity>
+		<a-entity id="redTeam-players" position='90 16 15' rotation='0 -90 0' n-text='text: RecRoom Kids Players: ;' ></a-entity>
 		
 		<!-- blue team text -->
-		<a-entity id="blueTeam-text" position='90 13 0' rotation='0 -90 0' n-text='text: Blue Team : ;'></a-entity>
-		<a-entity id="blueTeam-players" position='90 16 -15' rotation='0 -90 0' n-text='text: Blue Players : ;' ></a-entity>
+		<a-entity id="blueTeam-text" position='90 20 -15' rotation='0 -90 0' n-text='text: Altspace Angels Score : ;'></a-entity>
+		<a-entity id="blueTeam-players" position='90 16 -15' rotation='0 -90 0' n-text='text: Altspace Angels Players : ;' ></a-entity>
 		
 		<!-- game info text -->
 		<a-entity id="strikes" position="90 11 0" rotation="0 -90 0" n-text="text: Strikes: ;" ></a-entity>
@@ -141,7 +155,6 @@
 	
 	<!-- baseball bat -->
 	<a-entity n-mesh-collider="type:environment; convex: false" position="2 1 2" rotation="0 0 0" scale="0.1 0.16 0.1" collada-model="#bat"></a-entity>
-	<a-entity n-mesh-collider="type:environment; convex: false" position="10 3 0" rotation="0 0 0" scale="1 1 1" collada-model="#blue_shirt"></a-entity>
 	
 	<!--<a-entity position="0 1 0" n-object='res: effects/fireworks'></a-entity>-->
 	
@@ -232,6 +245,8 @@ var red_players; //synced
 var blue_runs;
 var blue_players;
 
+var inSession = []; //array stores everybody in current session
+
 var team; //local variable to track what team player is in
 
 var fireworks = document.createElement('a-entity');
@@ -242,7 +257,27 @@ var fireworks = document.createElement('a-entity');
 //creates firebase reference
 var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");
 
+scene.addEventListener('clientjoined', handlePlayerJoin);
+function handlePlayerJoin(){
+	console.log("player joined");
+}
+scene.addEventListener('clientleft', handlePlayerJoin);
+function handlePlayerLeave(){
+	console.log("player left");
+}
 
+//console.log(scene.scenesync.clientjoined);
+
+function getUser1(){
+	altspace.getUser().then(function(user1){
+		user = user1.displayName;
+		console.log(user + " joined the game");
+		addToSession();
+		updateFirebase();
+	});
+}
+getUser1();
+loaded();
 
 //sets red_runs up with value from database
 myFirebaseRef.child("redTeam/runs").on("value", function(snapshot) {
@@ -274,7 +309,10 @@ function readPlayers(){
 		console.log("bp: " + blue_players);
 	});
 	
-	
+	myFirebaseRef.child("inSession").on("value", function(snapshot){
+		inSession = snapshot.val();
+		console.log(inSession.length + " people in current session");
+	});
 }//end read players
 
 function updateFirebase(){
@@ -287,13 +325,28 @@ function updateFirebase(){
 		blueTeam: {
 			runs: blue_runs,
 			players: blue_players
-		}
+		},
+		inSession: inSession
 	});
 
 }
 
 readRuns();
 readPlayers();
+addToSession();
+
+function addToSession(){
+
+	//hoping noone is called "---"
+	if (inSession[0] == "---"){
+		inSession[0] = user;
+	} else {
+		inSession.push(user);
+	}//end if
+	
+	console.log(user + " added to current session");
+
+}
 
 //used to end homerun fireworks
 function endFireworks(){
@@ -307,12 +360,27 @@ setInterval(updateScoreBoard, 200);
 
 //updates scoreboard
 function updateScoreBoard(){
-	document.querySelector('#redTeam-text').setAttribute('n-text','text: Red Team: ' + red_runs + " Runs");
-	document.querySelector('#redTeam-players').setAttribute('n-text','text: Red Players: ' + red_players);
+	document.querySelector('#redTeam-text').setAttribute('n-text','fontSize: 10; text: RecRoom Kids Score: ' + red_runs + " Runs");
+	document.querySelector('#redTeam-players').setAttribute('n-text','text: RecRoom Kids Players: ' + red_players);
 	
-	document.querySelector('#blueTeam-text').setAttribute('n-text','text: Blue Team: ' + blue_runs + " Runs");
-	document.querySelector('#blueTeam-players').setAttribute('n-text','text: Blue Players: ' + blue_players);
+	document.querySelector('#blueTeam-text').setAttribute('n-text','fontSize: 10; text: Altspace Angels Score: ' + blue_runs + " Runs");
+	document.querySelector('#blueTeam-players').setAttribute('n-text','text: Altspace Angels Players: ' + blue_players);
 }//end updateScoreBoard
+
+//unequip shirts
+function removeShirt(){
+
+	if (teamJoined == true ){
+		if (team == "blue"){
+			document.querySelector('#s_blue').emit('equip_s');
+		}else if (team == "red"){
+			document.querySelector('#s_red').emit('equip_s');
+		}
+	
+	
+	}
+
+}
 
 AFRAME.registerComponent('base_collision',
                          {
@@ -341,7 +409,7 @@ AFRAME.registerComponent('base_collision',
     function handleJoin(event)
     {
 	    
-		//console.log(last_base);
+		//console.log(event.target);
 		
 	    if(self.data.box_id == 0){
 		
@@ -423,7 +491,7 @@ AFRAME.registerComponent('base_collision',
 	
     }//end function handle leave
   }
-});
+}); //end base collision
 
 //control boxes
 var redMat = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
@@ -431,21 +499,21 @@ var red2Mat = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
 var blueMat = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
 var stopSoundMat = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 var boxGeo = new THREE.BoxGeometry(1, 1, 1);
-var redBox = new THREE.Mesh(boxGeo, redMat);
+var redTeamJoinBox = new THREE.Mesh(boxGeo, redMat);
 var resetBox = new THREE.Mesh(boxGeo, red2Mat);
 var stopSoundBox = new THREE.Mesh(boxGeo, stopSoundMat);
 var blueTeamJoinBox = new THREE.Mesh(boxGeo, blueMat);
 var leaveTeamBox = new THREE.Mesh(boxGeo, red2Mat);
 var sim = new altspace.utilities.Simulation();
-redBox.position.set(-2, 0.5, 2);
-blueTeamJoinBox.position.set(-2, 1.5, 2);
+redTeamJoinBox.position.set(20, 2, 5);
+blueTeamJoinBox.position.set(20, 2, -5);
 resetBox.position.set(-1, 0.5 , 2);
 stopSoundBox.position.set(0, 0.5, 2);
-leaveTeamBox.position.set(-3, 0.5, 2);
+leaveTeamBox.position.set(20, 2, 0);
 
 var teamJoined = false;
 
-redBox.addEventListener('cursordown', function(){
+redTeamJoinBox.addEventListener('cursordown', function(){
 
 	//update team number value
 	
@@ -464,7 +532,7 @@ redBox.addEventListener('cursordown', function(){
 			red_players.push(user); //adds player to redteam
 		}
 		
-		
+		document.querySelector('#s_red').emit('equip_s');
 		
 		
 	}
@@ -493,6 +561,8 @@ blueTeamJoinBox.addEventListener('cursordown', function(){
 			blue_players.push(user); //adds player to redteam
 		}
 		
+		document.querySelector('#s_blue').emit('equip_s');
+		
 	}
 	
 	updateFirebase();
@@ -502,12 +572,17 @@ blueTeamJoinBox.addEventListener('cursordown', function(){
 //temporary?	
 resetBox.addEventListener('cursordown', function(){
 	console.log("reset");
+	
+	removeShirt(); // do this before teamJoined and team=""
+	
 	teamJoined = false; //reset clicked value
 	
 	//reset players value to default "tim"
 	red_players = ["---"];
 	blue_players = ["---"];
 	team = "";
+	
+	
 	
 	//update database
 	updateFirebase();
@@ -518,6 +593,8 @@ resetBox.addEventListener('cursordown', function(){
 //leave team box click
 leaveTeamBox.addEventListener('cursordown', function(){
 	console.log("leave team");
+	
+	removeShirt();
 	
 	if (team=="red"){
 		var i = red_players.indexOf(user);
@@ -551,21 +628,15 @@ stopSoundBox.addEventListener('cursordown', function(){
 
 sim.scene.add(blueTeamJoinBox);
 sim.scene.add(stopSoundBox);
-sim.scene.add(redBox);
+sim.scene.add(redTeamJoinBox);
 sim.scene.add(resetBox);
 sim.scene.add(leaveTeamBox);
 
 loaded();
 
-console.log("Version 0.1");
 //does this function once everything has loaded in
 function loaded(){
 	//move document so baseball does not collide
-	altspace.getUser().then(function(user1){
-		user = user1.displayName;
-		console.log(user + " joined the game");	
-	});
-	
 	altspace.getDocument().then(function (document) { document.position.set(100, 100, 100); document.rotation.set(0, 90, 0);});
 	console.log("loaded");
 }

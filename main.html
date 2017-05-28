@@ -253,7 +253,7 @@ var fireworks = document.createElement('a-entity');
 				fireworks.setAttribute('position', '32, 2, 0');
 				fireworks.setAttribute('n-object', 'res:effects/fireworks');
 	
-
+console.log("version 0.1.1")
 //creates firebase reference
 var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");
 
@@ -261,7 +261,7 @@ scene.addEventListener('clientjoined', handlePlayerJoin);
 function handlePlayerJoin(){
 	console.log("player joined");
 }
-scene.addEventListener('clientleft', handlePlayerJoin);
+scene.addEventListener('clientleft', handlePlayerLeave);
 function handlePlayerLeave(){
 	console.log("player left");
 }

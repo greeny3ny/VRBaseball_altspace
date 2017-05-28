@@ -71,11 +71,21 @@
 	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.15; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	
+	<!-- temporary button text -->
+	<a-entity position='0 0.5 1.45' rotation='0 180 0' n-text='text: Stop Music ; fontSize:3; width:1;'></a-entity> <!-- stop music text -->
+	<a-entity position='-1 0.5 1.45' rotation='0 180 0' n-text='text: Reset Teams ; fontSize:3; width:1;'></a-entity> <!-- reset teams text -->
+	<a-entity position='-2 0.5 1.45' rotation='0 180 0' n-text='text: Join Red Team ; fontSize:3; width:1;'></a-entity> <!-- red team join text -->
+	<a-entity position='-2 1.5 1.45' rotation='0 180 0' n-text='text: Join Blue Team ; fontSize:3; width:1;'></a-entity> <!-- blue team join text -->
+	<!-- temp text end -->
+	
 	<!-- scoreboard -->
 	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0" n-mesh-collider="type:hologram">
 		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
 		<a-entity id="redTeam-text" position='90 14 0' rotation='0 -90 0' n-text='text: Red Team : ;'></a-entity>
-		<a-entity id="redTeam-players" position='90 16 15' rotation='0 -90 0' n-text='text: Red Players : ; height:0.1;' ></a-entity>
+		<a-entity id="redTeam-players" position='90 16 15' rotation='0 -90 0' n-text='text: Red Players : ;' ></a-entity>
+		
+		<a-entity id="blueTeam-text" position='90 13 0' rotation='0 -90 0' n-text='text: Blue Team : ;'></a-entity>
+		<a-entity id="blueTeam-players" position='90 16 -15' rotation='0 -90 0' n-text='text: Blue Players : ;' ></a-entity>
 		
 		<a-box position='92 14 0' color="black" scale="0.1 20 20"></a-box>
 		
@@ -196,16 +206,23 @@ var last_base = 9; //used to work out if player has hit all 3 bases
 var user; //stores username
 
 var red_runs; //red runs (synced using firebase)
-var red_names; //
+var red_players; //synced
+
+var blue_runs;
+var blue_players;
+
+var team; //local variable to track what team player is in
+
 var fireworks = document.createElement('a-entity');
 				fireworks.setAttribute('position', '32, 2, 0');
 				fireworks.setAttribute('n-object', 'res:effects/fireworks');
 	
-var red_players;
-var red_players_parsed;
-	
+
 //creates firebase reference
-var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");		
+var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");
+
+
+		
 //sets red_runs up with value from database
 myFirebaseRef.child("redTeam/runs").on("value", function(snapshot) {
   console.log(snapshot.val());
@@ -213,13 +230,32 @@ myFirebaseRef.child("redTeam/runs").on("value", function(snapshot) {
 });
 //sets red_runs up with value from database
 
+function readRuns(){
+	myFirebaseRef.child("redTeam/runs").on("value", function(snapshot) {
+		console.log(snapshot.val());
+		red_runs = snapshot.val();
+	});
+	myFirebaseRef.child("blueTeam/runs").on("value", function(snapshot) {
+		console.log(snapshot.val());
+		blue_runs = snapshot.val();
+	});
+}//end read runs
+
+
 function readPlayers(){
-myFirebaseRef.child("redTeam/players").on("value", function(snapshot) {
-  red_players = snapshot.val();
-  console.log("rp: " + red_players);
-});
+	myFirebaseRef.child("redTeam/players").on("value", function(snapshot) {
+		red_players = snapshot.val();
+		console.log("rp: " + red_players);
+	});
+	
+	myFirebaseRef.child("blueTeam/players").on("value", function(snapshot) {
+		blue_players = snapshot.val();
+		console.log("bp: " + blue_players);
+	});
+	
 }//end read players
 
+readRuns();
 readPlayers();
 
 //used to end homerun fireworks
@@ -231,12 +267,14 @@ function endFireworks(){
 setInterval(updateScoreBoard, 200);
 
 //make scoreboard more like baseball scoreboard?
-var red_parsed = false;
-var red_text = [];
+
 //updates scoreboard
 function updateScoreBoard(){
 	document.querySelector('#redTeam-text').setAttribute('n-text','text: Red Team: ' + red_runs + " Runs");
-	document.querySelector('#redTeam-players').setAttribute('n-text','text: Red Team: ' + red_players);
+	document.querySelector('#redTeam-players').setAttribute('n-text','text: Red Players: ' + red_players);
+	
+	document.querySelector('#blueTeam-text').setAttribute('n-text','text: Blue Team: ' + blue_runs + " Runs");
+	document.querySelector('#blueTeam-players').setAttribute('n-text','text: Blue Players: ' + blue_players);
 }//end updateScoreBoard
 
 AFRAME.registerComponent('base_collision',
@@ -281,13 +319,22 @@ AFRAME.registerComponent('base_collision',
 				scene.appendChild(fireworks);
 				setTimeout(endFireworks, 6000);
 				
-				red_runs ++;
+				if (team == "red"){
+					red_runs ++;
+				}else if( team == "blue"){
+					blue_runs ++;
+				}
 				
 				//update firebase
+				//make seperate function for this?
 				myFirebaseRef.update({
 						redTeam: {
 						runs: red_runs,
 						players: red_players
+						},
+						blueTeam: {
+						runs: blue_runs,
+						players: blue_players
 						}
 				});
 				
@@ -352,27 +399,31 @@ AFRAME.registerComponent('base_collision',
 //control boxes
 var redMat = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
 var red2Mat = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-var stopSoundMat = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+var blueMat = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+var stopSoundMat = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 var boxGeo = new THREE.BoxGeometry(1, 1, 1);
 var redBox = new THREE.Mesh(boxGeo, redMat);
 var resetBox = new THREE.Mesh(boxGeo, red2Mat);
 var stopSoundBox = new THREE.Mesh(boxGeo, stopSoundMat);
+var blueTeamJoinBox = new THREE.Mesh(boxGeo, blueMat);
 var sim = new altspace.utilities.Simulation();
-redBox.position.set(0, 2, 0);
-resetBox.position.set(2, 2, 0);
+redBox.position.set(-2, 0.5, 2);
+blueTeamJoinBox.position.set(-2, 1.5, 2);
+resetBox.position.set(-1, 0.5 , 2);
 stopSoundBox.position.set(0, 0.5, 2);
 
-var clicked = false;
+var teamJoined = false;
+
 redBox.addEventListener('cursordown', function(){
 
-	red_parsed = false;
 	//update team number value
 	
 	//only adds player once
-	if (clicked == false){
+	if (teamJoined == false){
 		console.log("red team joined");
 		red_players.push(user); //adds player to redteam
-		clicked = true; //only adds name once
+		teamJoined = true; //only adds name once
+		team = "red";
 	}
 	
 	//update database
@@ -383,21 +434,50 @@ redBox.addEventListener('cursordown', function(){
 		}
 	});
 	
-});
+}); //end red team join click
+
+//blueteamjoin click
+blueTeamJoinBox.addEventListener('cursordown', function(){
+
+	//update team number value
+	
+	//only adds player once
+	if (teamJoined == false){
+		console.log("blue team joined");
+		blue_players.push(user); //adds player to redteam
+		teamJoined = true; //only adds name once
+		team = "blue";
+	}
+	
+	//update database
+	myFirebaseRef.update({
+		blueTeam: {
+			runs: blue_runs,
+			players: blue_players
+		}
+	});
+	
+}); //end blue team join click
 
 //temporary?	
 resetBox.addEventListener('cursordown', function(){
 	console.log("reset");
-	clicked = false; //reset clicked value
+	teamJoined = false; //reset clicked value
 	
 	//reset players value to default "tim"
 	red_players = ["tim"];
+	blue_players = ["jim"];
+	team = "";
 	
 	//update database
-	myFirebaseRef.set({
+	myFirebaseRef.update({
 		redTeam: {
-		runs: red_runs,
-		players: red_players
+			runs: red_runs,
+			players: red_players
+		},
+		blueTeam: {
+			runs: blue_runs,
+			players: blue_players
 		}
 	});
 
@@ -411,7 +491,7 @@ stopSoundBox.addEventListener('cursordown', function(){
 	document.querySelector('#tmootbPC').setAttribute('n-sound', 'volume: 0');
 });
 
-
+sim.scene.add(blueTeamJoinBox);
 sim.scene.add(stopSoundBox);
 sim.scene.add(redBox);
 sim.scene.add(resetBox);

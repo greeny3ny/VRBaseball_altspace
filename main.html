@@ -236,36 +236,8 @@ var red_text = [];
 //updates scoreboard
 function updateScoreBoard(){
 	document.querySelector('#redTeam-text').setAttribute('n-text','text: Red Team: ' + red_runs + " Runs");
-	
-	if(red_parsed == false){
-		displayRedTeam();
-		red_parsed=true; //disabled atm
-	}
-	
-	//document.querySelector('#redTeam-players').setAttribute('n-text','width:4 ; text: Red Team: ' + red_players);
+	document.querySelector('#redTeam-players').setAttribute('n-text','text: Red Team: ' + red_players);
 }//end updateScoreBoard
-
-function displayRedTeam(){
-
-	//REALLY inefficient way of doing it, but should work with most names
-	//console.log("displaying red team")
-	if (red_players.length > 0){
-	
-		for (var i=0; i < red_players.length; i++){
-			var temp = document.createElement('a-entity');
-			temp.setAttribute('position','95 '+ (30-(2*i)) +' 30');
-			temp.setAttribute('n-text', "text: " + red_players[i]);
-			temp.setAttribute('rotation', '0 -90 0');
-			temp.setAttribute('scale', '2 2 2');
-			scene.appendChild(temp);
-			red_text.push(temp);
-		}
-		//doesnt work?
-		for (var i=0; i < red_players.length; i++){
-			scene.remove(red_text[i]);
-		}	
-	}
-}
 
 AFRAME.registerComponent('base_collision',
                          {
@@ -361,37 +333,34 @@ AFRAME.registerComponent('base_collision',
     {
 			
 		if(self.data.box_id == 0){
-		
 			document.querySelector('#sb-base0').emit('baseleft');
-		
 		}
 		else if(self.data.box_id == 1){
-			
 			document.querySelector('#sb-base1').emit('baseleft');
-			
 		}
 		else if(self.data.box_id == 2){
-		
 			document.querySelector('#sb-base2').emit('baseleft');
-			
 		}
 		else if(self.data.box_id == 3){
-			
 			document.querySelector('#sb-base3').emit('baseleft');
-			
 		}
 	
     }//end function handle leave
   }
 });
+
+//control boxes
 var redMat = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
 var red2Mat = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+var stopSoundMat = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
 var boxGeo = new THREE.BoxGeometry(1, 1, 1);
 var redBox = new THREE.Mesh(boxGeo, redMat);
 var resetBox = new THREE.Mesh(boxGeo, red2Mat);
+var stopSoundBox = new THREE.Mesh(boxGeo, stopSoundMat);
 var sim = new altspace.utilities.Simulation();
 redBox.position.set(0, 2, 0);
 resetBox.position.set(2, 2, 0);
+stopSoundBox.position.set(0, 0.5, 2);
 
 var clicked = false;
 redBox.addEventListener('cursordown', function(){
@@ -423,7 +392,6 @@ resetBox.addEventListener('cursordown', function(){
 	
 	//reset players value to default "tim"
 	red_players = ["tim"];
-	red_parsed = false;
 	
 	//update database
 	myFirebaseRef.set({
@@ -432,17 +400,24 @@ resetBox.addEventListener('cursordown', function(){
 		players: red_players
 		}
 	});
-	
-	for (var i=0; i < red_players.length; i++){
-			scene.remove(red_text[i]);
-		}	
-	
-	readPlayers();
+
 	
 });
-	sim.scene.add(redBox);
-	sim.scene.add(resetBox);
+
+//stop sound button
+stopSoundBox.addEventListener('cursordown', function(){
+	console.log("stop sound");
+	document.querySelector('#tmootbGEAR').setAttribute('n-sound', 'volume: 0');
+	document.querySelector('#tmootbPC').setAttribute('n-sound', 'volume: 0');
+});
+
+
+sim.scene.add(stopSoundBox);
+sim.scene.add(redBox);
+sim.scene.add(resetBox);
+
 	
+//does this function once everything has loaded in
 function loaded(){
 	//move document so baseball does not collide
 	altspace.getUser().then(function(user1){

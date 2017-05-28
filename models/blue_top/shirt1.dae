@@ -5,33 +5,27 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.78.0 commit date:2017-02-24, commit time:14:33, hash:e92f235283</authoring_tool>
     </contributor>
-    <created>2017-05-28T15:34:25</created>
-    <modified>2017-05-28T15:34:25</modified>
+    <created>2017-05-28T15:54:13</created>
+    <modified>2017-05-28T15:54:13</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_images>
-    <image id="arm" name="arm">
-      <init_from>arm.png</init_from>
-    </image>
-    <image id="baseball" name="baseball">
-      <init_from>baseball.png</init_from>
-    </image>
-    <image id="arm_003" name="arm_003">
-      <init_from>arm.003.png</init_from>
+    <image id="baked" name="baked">
+      <init_from>baked.png</init_from>
     </image>
   </library_images>
   <library_effects>
-    <effect id="Material_002-effect">
+    <effect id="baked-effect">
       <profile_COMMON>
-        <newparam sid="arm-surface">
+        <newparam sid="baked-surface">
           <surface type="2D">
-            <init_from>arm</init_from>
+            <init_from>baked</init_from>
           </surface>
         </newparam>
-        <newparam sid="arm-sampler">
+        <newparam sid="baked-sampler">
           <sampler2D>
-            <source>arm-surface</source>
+            <source>baked-surface</source>
           </sampler2D>
         </newparam>
         <technique sid="common">
@@ -43,43 +37,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <texture texture="arm-sampler" texcoord="UVMap"/>
-            </diffuse>
-            <specular>
-              <color sid="specular">0.5 0.5 0.5 1</color>
-            </specular>
-            <shininess>
-              <float sid="shininess">50</float>
-            </shininess>
-            <index_of_refraction>
-              <float sid="index_of_refraction">1</float>
-            </index_of_refraction>
-          </phong>
-        </technique>
-      </profile_COMMON>
-    </effect>
-    <effect id="Material_001-effect">
-      <profile_COMMON>
-        <newparam sid="arm_003-surface">
-          <surface type="2D">
-            <init_from>arm_003</init_from>
-          </surface>
-        </newparam>
-        <newparam sid="arm_003-sampler">
-          <sampler2D>
-            <source>arm_003-surface</source>
-          </sampler2D>
-        </newparam>
-        <technique sid="common">
-          <phong>
-            <emission>
-              <color sid="emission">0 0 0 1</color>
-            </emission>
-            <ambient>
-              <color sid="ambient">0 0 0 1</color>
-            </ambient>
-            <diffuse>
-              <texture texture="arm_003-sampler" texcoord="UVMap"/>
+              <texture texture="baked-sampler" texcoord="UVMap"/>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
@@ -96,76 +54,63 @@
     </effect>
   </library_effects>
   <library_materials>
-    <material id="Material_002-material" name="Material_002">
-      <instance_effect url="#Material_002-effect"/>
-    </material>
-    <material id="Material_001-material" name="Material_001">
-      <instance_effect url="#Material_001-effect"/>
+    <material id="baked-material" name="baked">
+      <instance_effect url="#baked-effect"/>
     </material>
   </library_materials>
   <library_geometries>
-    <geometry id="Cube_001-mesh" name="Cube.001">
+    <geometry id="baked-mesh" name="baked">
       <mesh>
-        <source id="Cube_001-mesh-positions">
-          <float_array id="Cube_001-mesh-positions-array" count="72">0.9421668 -1.181818 -3.925713 0.9421668 -1.181818 1.073961 0.9421668 1.181818 -3.925713 0.9421668 1.181818 1.073961 5.608833 -1.181818 -3.925713 5.608833 -1.181818 1.073961 5.608833 1.181818 -3.925713 5.608833 1.181818 1.073961 -1 -1 -1 -1 -1 1 -1 1 -1 -1 1 1 1 -1 -1 1 -1 1 1 1 -1 1 1 1 5.551053 -1 -1 5.551053 -1 1 5.551053 1 -1 5.551053 1 1 7.551053 -1 -1 7.551053 -1 1 7.551053 1 -1 7.551053 1 1</float_array>
+        <source id="baked-mesh-positions">
+          <float_array id="baked-mesh-positions-array" count="72">0.9421668 -1.181818 -3.925713 0.9421668 -1.181818 1.073961 0.9421668 1.181818 -3.925713 0.9421668 1.181818 1.073961 5.608833 -1.181818 -3.925713 5.608833 -1.181818 1.073961 5.608833 1.181818 -3.925713 5.608833 1.181818 1.073961 -1 -1 -1 -1 -1 1 -1 1 -1 -1 1 1 1 -1 -1 1 -1 1 1 1 -1 1 1 1 5.551053 -1 -1 5.551053 -1 1 5.551053 1 -1 5.551053 1 1 7.551053 -1 -1 7.551053 -1 1 7.551053 1 -1 7.551053 1 1</float_array>
           <technique_common>
-            <accessor source="#Cube_001-mesh-positions-array" count="24" stride="3">
+            <accessor source="#baked-mesh-positions-array" count="24" stride="3">
               <param name="X" type="float"/>
               <param name="Y" type="float"/>
               <param name="Z" type="float"/>
             </accessor>
           </technique_common>
         </source>
-        <source id="Cube_001-mesh-normals">
-          <float_array id="Cube_001-mesh-normals-array" count="18">-1 0 0 0 1 0 1 0 0 0 -1 0 0 0 -1 0 0 1</float_array>
+        <source id="baked-mesh-normals">
+          <float_array id="baked-mesh-normals-array" count="18">-1 0 0 0 1 0 1 0 0 0 -1 0 0 0 -1 0 0 1</float_array>
           <technique_common>
-            <accessor source="#Cube_001-mesh-normals-array" count="6" stride="3">
+            <accessor source="#baked-mesh-normals-array" count="6" stride="3">
               <param name="X" type="float"/>
               <param name="Y" type="float"/>
               <param name="Z" type="float"/>
             </accessor>
           </technique_common>
         </source>
-        <source id="Cube_001-mesh-map-0">
-          <float_array id="Cube_001-mesh-map-0-array" count="144">0.6666668 0.3333333 0.3333334 0.3333333 0.3333334 0 0.6666667 0 0.3333333 0.6666666 0 0.6666667 0 0.3333334 0.3333333 0.3333333 0.3333334 0.3333333 1.29143e-7 0.3333333 0 0 0.3333333 0 0.3333334 0.6666666 0.3333334 0.3333334 0.6666667 0.3333333 0.6666668 0.6666666 1 0.3333332 0.6666668 0.3333332 0.6666668 0 1 0 0.3333333 0.6666667 0.3333333 1 0 1 0 0.6666668 0.6666668 0.3333333 0.3333334 0.3333333 0.3333334 0 0.6666667 0 0.3333333 0.6666666 0 0.6666667 0 0.3333334 0.3333333 0.3333333 0.3333334 0.3333333 1.29143e-7 0.3333333 0 0 0.3333333 0 0.3333334 0.6666666 0.3333334 0.3333334 0.6666667 0.3333333 0.6666668 0.6666666 1 0.3333332 0.6666668 0.3333332 0.6666668 0 1 0 0.3333333 0.6666667 0.3333333 1 0 1 0 0.6666668 0.6666668 0.3333333 0.3333334 0.3333333 0.3333334 0 0.6666667 0 0.3333333 0.6666666 0 0.6666667 0 0.3333334 0.3333333 0.3333333 0.3333334 0.3333333 1.29143e-7 0.3333333 0 0 0.3333333 0 0.3333334 0.6666666 0.3333334 0.3333334 0.6666667 0.3333333 0.6666668 0.6666666 1 0.3333332 0.6666668 0.3333332 0.6666668 0 1 0 0.3333333 0.6666667 0.3333333 1 0 1 0 0.6666668</float_array>
+        <source id="baked-mesh-map-0">
+          <float_array id="baked-mesh-map-0-array" count="144">0 0.7691999 0 0.3846 0.1772726 0.3846 0.1772727 0.7691999 0 0.3846 0 0 0.35 0 0.35 0.3845999 0.1772727 0.7691999 0.1772727 0.3846 0.3545455 0.3846 0.3545454 0.7691999 0.3500001 0.3845999 0.35 0 0.7 0 0.7 0.3845999 0.5318182 0.7435833 0.5318182 0.3846 0.7090908 0.3846 0.7090909 0.7435832 0.5318182 0.3846 0.5318182 0.7435832 0.3545455 0.7435833 0.3545455 0.3846 0.8590909 0.6923 0.7090909 0.6923 0.7090908 0.53845 0.8590908 0.53845 0.85 0.3077 0.7000001 0.3077 0.7000001 0.15385 0.85 0.15385 0.85 0.15385 0.7000001 0.15385 0.7000001 0 0.85 0 0.7090909 0.53845 0.7090908 0.3846 0.8590908 0.3846 0.8590909 0.53845 1 0.1538499 0.8500001 0.1538499 0.85 0 1 0 0.6545454 0.7435832 0.6545454 0.8974332 0.5045455 0.8974332 0.5045454 0.7435832 0.8590908 0.84615 0.7090909 0.84615 0.7090908 0.6923 0.8590908 0.6923 0.1499999 0.9230499 0 0.9230499 0 0.7691999 0.1499999 0.7691999 1 0.3077 0.8500001 0.3077 0.85 0.15385 1 0.15385 0.3545455 0.8974332 0.3545455 0.7435832 0.5045454 0.7435832 0.5045454 0.8974332 0.7090909 1 0.7090908 0.8461501 0.8590908 0.8461501 0.8590908 1 0.2999999 0.7691999 0.3 0.9230499 0.15 0.9230499 0.15 0.7691999</float_array>
           <technique_common>
-            <accessor source="#Cube_001-mesh-map-0-array" count="72" stride="2">
+            <accessor source="#baked-mesh-map-0-array" count="72" stride="2">
               <param name="S" type="float"/>
               <param name="T" type="float"/>
             </accessor>
           </technique_common>
         </source>
-        <vertices id="Cube_001-mesh-vertices">
-          <input semantic="POSITION" source="#Cube_001-mesh-positions"/>
+        <vertices id="baked-mesh-vertices">
+          <input semantic="POSITION" source="#baked-mesh-positions"/>
         </vertices>
-        <polylist material="Material_002-material" count="6">
-          <input semantic="VERTEX" source="#Cube_001-mesh-vertices" offset="0"/>
-          <input semantic="NORMAL" source="#Cube_001-mesh-normals" offset="1"/>
-          <input semantic="TEXCOORD" source="#Cube_001-mesh-map-0" offset="2" set="0"/>
-          <vcount>4 4 4 4 4 4 </vcount>
-          <p>8 0 24 9 0 25 11 0 26 10 0 27 10 1 28 11 1 29 15 1 30 14 1 31 14 2 32 15 2 33 13 2 34 12 2 35 12 3 36 13 3 37 9 3 38 8 3 39 10 4 40 14 4 41 12 4 42 8 4 43 15 5 44 11 5 45 9 5 46 13 5 47</p>
-        </polylist>
-        <polylist material="Material_001-material" count="12">
-          <input semantic="VERTEX" source="#Cube_001-mesh-vertices" offset="0"/>
-          <input semantic="NORMAL" source="#Cube_001-mesh-normals" offset="1"/>
-          <input semantic="TEXCOORD" source="#Cube_001-mesh-map-0" offset="2" set="0"/>
-          <vcount>4 4 4 4 4 4 4 4 4 4 4 4 </vcount>
-          <p>0 0 0 1 0 1 3 0 2 2 0 3 2 1 4 3 1 5 7 1 6 6 1 7 6 2 8 7 2 9 5 2 10 4 2 11 4 3 12 5 3 13 1 3 14 0 3 15 2 4 16 6 4 17 4 4 18 0 4 19 7 5 20 3 5 21 1 5 22 5 5 23 16 0 48 17 0 49 19 0 50 18 0 51 18 1 52 19 1 53 23 1 54 22 1 55 22 2 56 23 2 57 21 2 58 20 2 59 20 3 60 21 3 61 17 3 62 16 3 63 18 4 64 22 4 65 20 4 66 16 4 67 23 5 68 19 5 69 17 5 70 21 5 71</p>
+        <polylist material="baked-material" count="18">
+          <input semantic="VERTEX" source="#baked-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#baked-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#baked-mesh-map-0" offset="2" set="0"/>
+          <vcount>4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 </vcount>
+          <p>0 0 0 1 0 1 3 0 2 2 0 3 2 1 4 3 1 5 7 1 6 6 1 7 6 2 8 7 2 9 5 2 10 4 2 11 4 3 12 5 3 13 1 3 14 0 3 15 2 4 16 6 4 17 4 4 18 0 4 19 7 5 20 3 5 21 1 5 22 5 5 23 8 0 24 9 0 25 11 0 26 10 0 27 10 1 28 11 1 29 15 1 30 14 1 31 14 2 32 15 2 33 13 2 34 12 2 35 12 3 36 13 3 37 9 3 38 8 3 39 10 4 40 14 4 41 12 4 42 8 4 43 15 5 44 11 5 45 9 5 46 13 5 47 16 0 48 17 0 49 19 0 50 18 0 51 18 1 52 19 1 53 23 1 54 22 1 55 22 2 56 23 2 57 21 2 58 20 2 59 20 3 60 21 3 61 17 3 62 16 3 63 18 4 64 22 4 65 20 4 66 16 4 67 23 5 68 19 5 69 17 5 70 21 5 71</p>
         </polylist>
       </mesh>
     </geometry>
   </library_geometries>
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
-      <node id="Cube_001" name="Cube_001" type="NODE">
+      <node id="baked" name="baked" type="NODE">
         <matrix sid="transform">0.06 0 0 -0.19653 0 0.11 0 0 0 0 0.1100072 -0.003717974 0 0 0 1</matrix>
-        <instance_geometry url="#Cube_001-mesh" name="Cube_001">
+        <instance_geometry url="#baked-mesh" name="baked">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material_002-material" target="#Material_002-material">
-                <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="0"/>
-              </instance_material>
-              <instance_material symbol="Material_001-material" target="#Material_001-material">
+              <instance_material symbol="baked-material" target="#baked-material">
                 <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="0"/>
               </instance_material>
             </technique_common>

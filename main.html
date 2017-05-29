@@ -255,8 +255,9 @@ fireworks.setAttribute('position', '32, 2, 0');
 fireworks.setAttribute('n-object', 'res:effects/fireworks');
 var id;
 var id_playerLeft;
+var playerLeft;
 				
-console.log("version 0.1.e.1")
+console.log("version 0.1.e.3")
 //creates firebase reference
 var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");
 
@@ -311,6 +312,9 @@ function checkDatabase(){
 		console.log("temp :" + temp);
 		if (temp[1] == id_playerLeft){
 			console.log("player " + temp[0] + " left");
+			playerLeft = temp[0];
+			inSession.splice(i, 1);
+			updateDatabase();
 		} 
 	}
 

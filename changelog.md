@@ -10,3 +10,19 @@
     - Stop Music
     - Join red/blue team
     - Reset teams (possibly temporary)
+
+29/05/2017 Changes:
+Version 0.1.e.3
+
+  - Player *should* now be removed from inSession when they leave
+    - Not fully tested
+    - Coded in some horribly complicated way
+  - Team names added
+  - Team Shirts added
+    - equipped when player joins team
+  - Aesthetic changes
+  - Code made slightly more efficient
+  - Code cleaned up
+  
+FOUND BUGS :
+  - Database resets scores occasionally?

@@ -308,6 +308,7 @@ function checkDatabase(){
 	for (var i=0; i < inSession.length; i++){
 		var temp = inSession[i].split(" ");
 		//temp[0] = name, temp[1] = id
+		console.log("temp :" + temp);
 		if (temp[1] == id_playerLeft){
 			console.log("player " + temp[0] + " left");
 		} 

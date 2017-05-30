@@ -257,7 +257,7 @@ var id;
 var id_playerLeft;
 var playerLeft;
 				
-console.log("version 0.1.e.4")
+console.log("version 0.1.e.5")
 //creates firebase reference
 var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");
 
@@ -290,9 +290,8 @@ function getUser1(){
 	
 	altspace.getUser().then(function(user1){
 		user = user1.displayName;
-		//console.log(user1);
-		//console.log(id + " joined the game");
-		setTimeout(addToSession, 1000); 
+		//sets timeout to deal with latency issues - kinda works
+		setTimeout(addToSession, 2000); 
 	});
 	
 }
@@ -302,23 +301,60 @@ getUser1();
 function checkDatabase(){
 
 	console.log("checking firebase for player that left...");
-	readInSession();
+	readInSession(); //reads firebase database
 	console.log(inSession);
 	
-	//untested, idk if it works or no
+	//loops through everyone firebase says is in game
 	for (var i=0; i < inSession.length; i++){
-		var temp = inSession[i].split(" ");
+		var temp = inSession[i].split(" "); //used to parse variable
 		//temp[0] = name, temp[1] = id
 		console.log("temp :" + temp);
-		if (temp[1] == id_playerLeft){
+		if (temp[1] == id_playerLeft){ //if the id of the player that left is id in the database
 			console.log("player " + temp[0] + " left");
-			playerLeft = temp[0];
-			inSession.splice(i, 1);
-			updateFirebase();
+			playerLeft = temp[0]; //get players name
+			inSession.splice(i, 1); //remove them from database
+			
+			//doesnt work if only 1 player is in game - add a catch?
+			
+			//will probs break if more than 1 person has the same name
+			//check teams for player
+			//doesnt need to read from database again as players should already be in place (i hope)
+			//checkPlayers();
+			
+			updateFirebase(); //update database
 		} 
 	}
 
 }
+
+//used to check what team left player was on
+function checkPlayers(){
+	
+	var removed = false; //used for console logging
+	//check red team
+	for (var i = 0; i < red_players.length; i++){
+		if (red_players[i] == playerLeft){
+			red_players.splice(i, 1); //remove from array
+			removed = true;
+			console(playerLeft + " removed from red team");
+		}//end if
+	}//end for
+	//check blue team
+	for (var i = 0; i < blue_players.length; i++){
+		if (blue_players[i] == playerLeft){
+			blue_players.splice(i, 1); //remove from array
+			removed = true;
+			console(playerLeft + " removed from blue team");
+		}//end if
+	}//end for
+	
+	if (removed == false){
+		console(playerLeft + " was not in a team");
+	}
+	removed = false;
+	
+}
+
 
 //sets red_runs up with value from database
 function readRuns(){
@@ -616,7 +652,7 @@ blueTeamJoinBox.addEventListener('cursordown', function(){
 	updateFirebase();
 	
 }); //end blue team join click
-//temporary?	
+//temporary?	- breaks alot of things
 resetBox.addEventListener('cursordown', function(){
 	console.log("reset");
 	
@@ -653,6 +689,7 @@ leaveTeamBox.addEventListener('cursordown', function(){
 		}
 	}
 	
+	//checks if array is empty and pushes in placeholder value
 	if (red_players.length == 0){red_players.push("---");}
 	if (blue_players.length == 0){blue_players.push("---");}
 	

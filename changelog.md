@@ -26,3 +26,13 @@ Version 0.1.e.3
   
 FOUND BUGS :
   - Database resets scores occasionally?
+  
+Version 0.1.e.5:
+
+  - Player *should* be removed from team when they leave the game
+    - Not tested
+  - Currently broken when only 1 player is in the game
+    - When they leave database does not remove them
+    - When a new player joins for the first time database is reset? (i think)
+      - Not supposed to happen
+

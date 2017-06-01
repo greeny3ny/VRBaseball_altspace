@@ -71,8 +71,6 @@
 	<a-mixin id="parent-to-chest" position="-0.24 0.3 0" n-skeleton-parent="part: spine;" scale="1.1 1 1.1" sync sync-n-skeleton-parent></a-mixin>
 	<a-entity position="31 2.1 2" mixin="bat1" rotation="180 0 0" scale="0.3 0.36 0.3" instantiator="on: click;group:bat1; mixin: bat1 parent-to-right-hand"></a-entity>
 	
-	
-	
 	<!-- temporary bat (just a box)-->
 	<a-entity position="31 2.1 -2" n-spawner="res: interactables/box"></a-entity> 
 	
@@ -85,7 +83,7 @@
 	
 	<!-- temporary text -->
 	<a-entity position='0 0.5 1.45' rotation='0 180 0' n-text='text: Stop Music ; fontSize:3; width:1;'></a-entity> <!-- stop music text -->
-	<a-entity position='-1 0.5 1.45' rotation='0 180 0' n-text='text: Reset Teams ; fontSize:3; width:1;'></a-entity> <!-- reset teams text -->
+<!--	<a-entity position='-1 0.5 1.45' rotation='0 180 0' n-text='text: Reset Teams ; fontSize:3; width:1;'></a-entity> <!-- reset teams text -->
 	<a-entity position='19.45 2 5' rotation='0 -90 0' n-text='text: Join The RecRoom Kids ; fontSize:2; width:1;'></a-entity> <!-- red team join text -->
 	<a-entity position='19.45 2 -5' rotation='0 -90 0' n-text='text: Join The Altspace Angels ; fontSize:2; width:1;'></a-entity> <!-- blue team join text -->
 	<a-entity position='19.45 2 0' rotation='0 -90 0' n-text='text: Leave Current Team ; fontSize:3; width:1;'></a-entity> <!-- leave team text -->
@@ -153,9 +151,6 @@
 	<!-- baseball -->
 	<a-entity position="38 3 0" n-spawner='res: interactables/basketball'></a-entity>
 	
-	<!-- baseball bat -->
-	<a-entity n-mesh-collider="type:environment; convex: false" position="2 1 2" rotation="0 0 0" scale="0.1 0.16 0.1" collada-model="#bat"></a-entity>
-	
 	<!--<a-entity position="0 1 0" n-object='res: effects/fireworks'></a-entity>-->
 	
 		<!-- basic layout -->
@@ -206,11 +201,21 @@
 			<a-box id="home_collider" base_collision="box_id:0;"n-mesh-collider="type:hologram" color="white" position="32, 3, 0" rotation="0 0 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- home collider-->
 			<a-box id="base1_collider" base_collision="box_id:1;" n-mesh-collider="type:hologram" color="white" position="42, 3, 10" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base1 collider -->
 			<a-box id="base2_collider" base_collision="box_id:2;" n-mesh-collider="type:hologram" color="white" position="52, 3, 0" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base2 collider -->
-			<a-box id="base3_collider" base_collision="box_id:3;" n-mesh-collider="type:hologram" color="white" position="42, 3, -10" rotation="0 45 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- base3 collider -->
+			<a-box id="base3_collider" base_collision="box_id:3;" n-mesh-collider="type:hologram" color="white" position="42, 3, -10" rotation="0 45 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabaled: false"></a-box> <!-- base3 collider -->
       
 		<!-- borders -->
 		
-			<a-box n-mesh-collider="type:environment" color="grey" position="6, 0.5, 0" rotation="0 0 0" scale="1 2 30"></a-box>
+			<a-box n-mesh-collider="type:environment" color="grey" position="6, 0.5, 0" rotation="0 0 0" scale="1 2 50"></a-box>
+			<a-box n-mesh-collider="type:environment" color="orange" position="6, 3, 2.9" rotation="0 0 0" scale="1 3 1"></a-box>
+			<a-box n-mesh-collider="type:environment" color="orange" position="6, 3, -2.9 rotation="0 0 0" scale="1 3 1"></a-box>
+			<a-entity position="5.5 4 -3" n-object='res: effects/sparkler'></a-entity>
+			<a-entity position="5.5 4 3" n-object='res: effects/sparkler'></a-entity>
+			
+			<!-- walls -->
+			<a-box n-mesh-collider="type:environment" color="red" position="6.1, 2.8, -5" rotation="0 0 20" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" color="brown" position="6.1, 2.8, -10" rotation="0 0 20" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" color="brown" position="5.25, 5.85, -5" rotation="0 0 10" scale="0.1 3.2 5"></a-box>
+			<!-- end walls -->
 			<!--<a-box n-mesh-collider="type:environment" color="grey" position="11, 0.5, -20" rotation="0 -45 0" scale="1 2 14.142"></a-box>-->
 			<!--<a-box n-mesh-collider="type:environment" color="grey" position="11, 0.5, -20" rotation="0 -45 0" scale="1 2 14.142"></a-box>-->
 			<a-box n-mesh-collider="type:environment" color="green" position="50.4, 1.5, -25" rotation="0 90 0" scale="1 2 48"></a-box>
@@ -221,10 +226,6 @@
 			<a-box n-mesh-collider="type:environment" color="green" position="89.5, 1.5, -10" rotation="0 30 0" scale="1 2 17"></a-box>
 			<a-box n-mesh-collider="type:environment" color="green" position="80.5, 1.5, 20" rotation="0 -60 0" scale="1 2 20"></a-box>
 			<a-box n-mesh-collider="type:environment" color="green" position="89.5, 1.5, 10" rotation="0 -30 0" scale="1 2 17"></a-box>
-
-		  <!-- homerun fireworks -->
-        <!--<a-entity id="hr_firework" position="32 1 0" n-object='res: effects/fireworks' wire='on:homeRun'></a-entity>
-		-->
 		
 		<!-- homerun horn -->
 		<a-entity id="hornPC" sync="own-on:homerun" sync-n-sound n-sound="on:homerun; src:https://greeny3ny.github.io/VRBaseball_altspace/audio/horn1.ogg; volume: 0.1; loop: false; autoplay: false;" n-skeleton-parent="part: spine"></a-entity>
@@ -257,7 +258,7 @@ var id;
 var id_playerLeft;
 var playerLeft;
 				
-console.log("version 0.1.e.5")
+console.log("version 0.1.e.6") //used for my reference
 //creates firebase reference
 var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");
 
@@ -277,13 +278,24 @@ function handlePlayerJoin(event){
 		ownID = true;
 	}
 	console.log("player " + event.detail.id + " joined");
+	
+	//checks if player that joins is first player
+	if (inSession.length == 1 && inSession[0] == "---"){
+		console.log("first player");
+		
+		//if so reset variables
+		reset();
+		console.log("reset variables");
+		
+	}
+	
 }
 //check for client leaving
 scene.addEventListener('clientleft', handlePlayerLeave);
 function handlePlayerLeave(event){
-	id_playerLeft = event.detail.id;
-	console.log("player " + id_playerLeft + " left");
-	checkDatabase();
+	id_playerLeft = event.detail.id; //get id of player that left
+	console.log("player " + id_playerLeft + " left"); //log player id
+	checkDatabase(); //check database for player that left
 }
 //gets username of joined player
 function getUser1(){
@@ -302,7 +314,7 @@ function checkDatabase(){
 
 	console.log("checking firebase for player that left...");
 	readInSession(); //reads firebase database
-	console.log(inSession);
+	console.log("inSession: " + inSession);
 	
 	//loops through everyone firebase says is in game
 	for (var i=0; i < inSession.length; i++){
@@ -314,15 +326,12 @@ function checkDatabase(){
 			playerLeft = temp[0]; //get players name
 			inSession.splice(i, 1); //remove them from database
 			
-			//doesnt work if only 1 player is in game - add a catch?
-			
 			//will probs break if more than 1 person has the same name
 			//check teams for player
 			//doesnt need to read from database again as players should already be in place (i hope)
-			//checkPlayers();
-			
+			checkPlayers();
 			updateFirebase(); //update database
-		} 
+		} else { console.log("unable to find player that left");}
 	}
 
 }
@@ -410,6 +419,17 @@ function updateFirebase(){
 		},
 		inSession: inSession
 	});
+}
+
+function reset(){
+	
+	red_runs = 0; //red runs (synced using firebase)
+	red_players = ["---"]; //synced
+	blue_runs = 0; //synced
+	blue_players = ["---"]; //synced
+	inSession = ["---"]; //array stores everybody in current session
+	
+	updateFirebase(); //update database
 }
 
 //adds current user to session

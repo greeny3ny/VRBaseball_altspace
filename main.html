@@ -78,10 +78,9 @@
 	
 	
 	<!-- disabled while testing so i dont get sick of song -->
-	<!--
+
 	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.1; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.1; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
-	-->
 	
 	<!-- temporary text -->
 	<a-entity position='0 0.5 1.45' rotation='0 180 0' n-text='text: Stop Music ; fontSize:3; width:1;'></a-entity> <!-- stop music text -->
@@ -764,7 +763,7 @@ stopSoundBox.addEventListener('cursordown', function(){
 sim.scene.add(blueTeamJoinBox);
 sim.scene.add(stopSoundBox);
 sim.scene.add(redTeamJoinBox);
-sim.scene.add(resetBox);
+//sim.scene.add(resetBox);
 sim.scene.add(leaveTeamBox);
 
 //moves document - kinda dodgy

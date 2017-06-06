@@ -1,0 +1,258 @@
+{
+    "accessors": {
+        "accessor_buffer_Cube.1728_0": {
+            "bufferView": "bufferView_buffer_Cube.1728_0",
+            "byteOffset": 0,
+            "byteStride": 32,
+            "componentType": 5126,
+            "count": 114974,
+            "max": [
+                21.497150421142578,
+                90.59712219238281,
+                1.000000238418579
+            ],
+            "min": [
+                -21.497148513793945,
+                -90.59712982177734,
+                -1.0
+            ],
+            "type": "VEC3"
+        },
+        "accessor_buffer_Cube.1728_1": {
+            "bufferView": "bufferView_buffer_Cube.1728_0",
+            "byteOffset": 12,
+            "byteStride": 32,
+            "componentType": 5126,
+            "count": 114974,
+            "max": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "min": [
+                -1.0,
+                -1.0,
+                -1.0
+            ],
+            "type": "VEC3"
+        },
+        "accessor_buffer_Cube.1728_2": {
+            "bufferView": "bufferView_buffer_Cube.1728_0",
+            "byteOffset": 24,
+            "byteStride": 32,
+            "componentType": 5126,
+            "count": 114974,
+            "max": [
+                0.9992762207984924,
+                0.9992761749890633
+            ],
+            "min": [
+                0.0007237911922857165,
+                0.0007238388061523438
+            ],
+            "type": "VEC2"
+        },
+        "accessor_buffer_Cube.1728_3": {
+            "bufferView": "bufferView_buffer_Cube.1728_1",
+            "byteOffset": 0,
+            "byteStride": 4,
+            "componentType": 5125,
+            "count": 117576,
+            "max": [
+                114973
+            ],
+            "min": [
+                0
+            ],
+            "type": "SCALAR"
+        }
+    },
+    "asset": {
+        "profile": {
+            "api": "WebGL",
+            "version": "1.0.3"
+        },
+        "version": "1.0"
+    },
+    "bufferViews": {
+        "bufferView_buffer_Cube.1728_0": {
+            "buffer": "buffer_combined",
+            "byteLength": 3679168,
+            "byteOffset": 0,
+            "target": 34962
+        },
+        "bufferView_buffer_Cube.1728_1": {
+            "buffer": "buffer_combined",
+            "byteLength": 470304,
+            "byteOffset": 3679168,
+            "target": 34963
+        }
+    },
+    "buffers": {
+        "buffer_combined": {
+            "byteLength": 4149472,
+            "type": "arraybuffer",
+            "uri": "buffer_combined.bin"
+        }
+    },
+    "extensions": {
+        "KHR_materials_common": {
+            "lights": {
+                "light_Sun": {
+                    "directional": {
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "name": "Sun",
+                    "type": "directional"
+                }
+            }
+        }
+    },
+    "extensionsUsed": [
+        "KHR_materials_common"
+    ],
+    "glExtensionsUsed": [
+        "OES_element_index_uint"
+    ],
+    "images": {
+        "image_seats1": {
+            "uri": "seats1.png"
+        }
+    },
+    "materials": {
+        "material_Material": {
+            "extensions": {
+                "KHR_materials_common": {
+                    "technique": "PHONG",
+                    "values": {
+                        "ambient": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "diffuse": "texture_Texture.002",
+                        "doubleSided": false,
+                        "emission": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "shininess": 50,
+                        "specular": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1.0
+                        ],
+                        "transparency": 1.0,
+                        "transparent": false
+                    }
+                }
+            },
+            "name": "Material"
+        }
+    },
+    "meshes": {
+        "mesh_Cube.1728": {
+            "name": "Cube.1728",
+            "primitives": [
+                {
+                    "attributes": {
+                        "NORMAL": "accessor_buffer_Cube.1728_1",
+                        "POSITION": "accessor_buffer_Cube.1728_0",
+                        "TEXCOORD_0": "accessor_buffer_Cube.1728_2"
+                    },
+                    "indices": "accessor_buffer_Cube.1728_3",
+                    "material": "material_Material",
+                    "mode": 4
+                }
+            ]
+        }
+    },
+    "nodes": {
+        "node_Sun": {
+            "children": [],
+            "extensions": {
+                "KHR_materials_common": {
+                    "light": "light_Sun"
+                }
+            },
+            "name": "Sun",
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                68.21243286132812
+            ]
+        },
+        "node_corner.001": {
+            "children": [],
+            "meshes": [
+                "mesh_Cube.1728"
+            ],
+            "name": "corner.001",
+            "rotation": [
+                0.0,
+                0.0,
+                1.0,
+                4.371138828673793e-08
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                6.0
+            ],
+            "translation": [
+                66.5,
+                -69.69999694824219,
+                7.0
+            ]
+        }
+    },
+    "samplers": {
+        "sampler_default": {}
+    },
+    "scene": "scene_Scene",
+    "scenes": {
+        "scene_Scene": {
+            "extras": {
+                "active_camera": null,
+                "background_color": [
+                    0.05087608844041824,
+                    0.05087608844041824,
+                    0.05087608844041824
+                ],
+                "frames_per_second": 24
+            },
+            "name": "Scene",
+            "nodes": [
+                "node_Sun",
+                "node_corner.001"
+            ]
+        }
+    },
+    "textures": {
+        "texture_Texture.002": {
+            "format": 6408,
+            "internalFormat": 6408,
+            "sampler": "sampler_default",
+            "source": "image_seats1"
+        }
+    }
+}

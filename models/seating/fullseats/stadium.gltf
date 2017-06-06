@@ -5,7 +5,7 @@
             "byteOffset": 0,
             "byteStride": 12,
             "componentType": 5126,
-            "count": 220008,
+            "count": 153480,
             "max": [
                 54.745704650878906,
                 90.87068939208984,
@@ -20,10 +20,10 @@
         },
         "accessor_buffer_Cube.1812_1": {
             "bufferView": "bufferView_buffer_Cube.1812_0",
-            "byteOffset": 2640096,
+            "byteOffset": 1841760,
             "byteStride": 12,
             "componentType": 5126,
-            "count": 220008,
+            "count": 153480,
             "max": [
                 1.0,
                 1.0,
@@ -38,10 +38,10 @@
         },
         "accessor_buffer_Cube.1812_2": {
             "bufferView": "bufferView_buffer_Cube.1812_0",
-            "byteOffset": 5280192,
+            "byteOffset": 3683520,
             "byteStride": 8,
             "componentType": 5126,
-            "count": 220008,
+            "count": 153480,
             "max": [
                 0.9998285174369812,
                 0.9998284640751081
@@ -57,9 +57,9 @@
             "byteOffset": 0,
             "byteStride": 4,
             "componentType": 5125,
-            "count": 330012,
+            "count": 256092,
             "max": [
-                220007
+                153479
             ],
             "min": [
                 0
@@ -77,20 +77,20 @@
     "bufferViews": {
         "bufferView_buffer_Cube.1812_0": {
             "buffer": "buffer_combined",
-            "byteLength": 7040256,
+            "byteLength": 4911360,
             "byteOffset": 0,
             "target": 34962
         },
         "bufferView_buffer_Cube.1812_1": {
             "buffer": "buffer_combined",
-            "byteLength": 1320048,
-            "byteOffset": 7040256,
+            "byteLength": 1024368,
+            "byteOffset": 4911360,
             "target": 34963
         }
     },
     "buffers": {
         "buffer_combined": {
-            "byteLength": 8360304,
+            "byteLength": 5935728,
             "type": "arraybuffer",
             "uri": "buffer_combined.bin"
         }

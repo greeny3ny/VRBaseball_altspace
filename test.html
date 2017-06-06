@@ -5,49 +5,6 @@
 	<script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
 	<script src="https://greeny3ny.github.io/VRBaseball_altspace/dist/altspace.js"></script>
 	<script src="https://cdn.rawgit.com/norybiak/Aframe-gltf/v0.2.0/dist/aframe-gltf.js"></script>
-	
-	<script>
-      // n-skeleton-parent only works with root meshes at the moment. Since most model loaders use a root
-      // container object, we need to collapse the model so that n-skeleton-parent can access the mesh directly.
-         AFRAME.registerComponent('collapse-model', {
-        init: function () {
-            this.el.addEventListener('model-loaded', function () {
-                this.el.object3DMap.mesh.updateMatrixWorld();
-                var mesh;
-                this.el.object3DMap.mesh.traverse(function (obj) {
-                    if (!mesh && obj instanceof THREE.Mesh) {
-                        mesh = obj;
-                    }
-                }.bind(this))
-                if (mesh) {
-                    this.el.sceneEl.object3D.updateMatrixWorld(true);
-                    mesh.scale.copy(mesh.getWorldScale());
-                    this.el.setObject3D('mesh', mesh);
-                    // setObject3D emits this event in a-frame 0.4.0
-                    this.el.emit('object3dset', {
-                        type: 'mesh'
-                    });
-                }
-            }.bind(this));
-        }
-    });
-  </script>
-
- <!-- firebase -->
-<script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyB9uKPr2N6JxNo7D5tzh6L62Yt4NYt6fNo",
-    authDomain: "altspace-baseball.firebaseapp.com",
-    databaseURL: "https://altspace-baseball.firebaseio.com",
-    projectId: "altspace-baseball",
-    storageBucket: "altspace-baseball.appspot.com",
-    messagingSenderId: "628420188026"
-  };
-  firebase.initializeApp(config);
-</script>
-	
 </head>
 	
 <body onload="loaded()">
@@ -66,6 +23,13 @@
 	<!--<a-entity position="-10 7 0" scale="1 1 1" rotation="0 90 0" collada-model="#seats" n-mesh-collider="type:environment"></a-entity> -->
 	<a-gltf-model id="seats" src="https://rawgit.com/greeny3ny/VRBaseball_altspace/master/models/seating/quarterseat/qseat.gltf" position="0 0 0" scale="1 1 1" rotation="0 0 0"></a-gltf-model>
 	<!-- end seating -->
+	
+	
+	
+	<a-gltf-model id="Tutorial1" src="https://rawgit.com/greeny3ny/VRBaseball_altspace/tree/master/models/seating/halfseat"
+                  position="1 2 0" rotation="0 0 0" scale="0.5 0.5 0.5">
+    </a-gltf-model>
+	
 	 <a-gltf-model id="Tutorial" src="https://rawgit.com/Zerithax/zerithax.github.io/master/Tutorial/Meshes/Tutorial.gltf"
                   position="0 2 0" rotation="0 0 0" scale="0.5 0.5 0.5">
     </a-gltf-model>

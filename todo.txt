@@ -1,0 +1,10 @@
+TODO :
+
+Rebake corner 1
+Bake and import corner 2
+Bake and import side 1
+
+Fix colliders on corners?
+Try get .gltf working instead of .dae
+
+Add models to actual baseball map

@@ -60,6 +60,8 @@
 		<a-asset-item id="bat" src="https://greeny3ny.github.io/VRBaseball_altspace/models/baseballbat.dae"></a-asset-item>
 		<a-asset-item id="blue_shirt" src="https://greeny3ny.github.io/VRBaseball_altspace/models/blue_top/shirt1.dae"></a-asset-item>
 		<a-asset-item id="red_shirt" src="https://greeny3ny.github.io/VRBaseball_altspace/models/red_top/redshirt.dae"></a-asset-item>
+		<a-asset-item id="edge" src="https://greeny3ny.github.io/VRBaseball_altspace/models/seating1/edge/edge.dae"></a-asset-item>
+		<a-asset-item id="corner" src="https://greeny3ny.github.io/VRBaseball_altspace/models/seating1/corner/stadium.dae"></a-asset-item>
 		<img id="board1" src="https://greeny3ny.github.io/VRBaseball_altspace/images/board1.png">
 		<img id="floor1" src="https://greeny3ny.github.io/VRBaseball_altspace/images/floor1.png">
 		<img id="wall2" src="https://greeny3ny.github.io/VRBaseball_altspace/images/wall2.png">
@@ -82,14 +84,43 @@
 	<!-- seating -->
 	<!-- temporary while i build full baseball stadium model -->
 	<!--<a-entity position="-10 7 0" scale="1 1 1" rotation="0 90 0" collada-model="#seats" n-mesh-collider="type:environment"></a-entity> -->
-	<a-gltf-model id="seats" src="https://rawgit.com/greeny3ny/VRBaseball_altspace/master/models/seating/quarterseat/qseat.gltf" position="0 2 0" scale="1 1 1" rotation="0 0 0"></a-gltf-model>
 	<!-- end seating -->
+	<!-- collider issues on seating -->
+	<!--<a-entity collada-model="#corner" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="10 1 -15" rotation="0 0 0"></a-entity>-->
+	
+	<a-entity id="seats" position="0 0 0">
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="-5 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="2 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="9 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="16 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="23 0.55 26" rotation="0 90 0"></a-entity>
+	
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="-5 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="2 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="9 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="16 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="23 3.35 31" rotation="0 90 0"></a-entity>
+	</a-entity>
+	
+	<a-entity id="seats" position="82 0 0" rotation="0 180 0">
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="-5 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="2 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="9 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="16 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="23 0.55 26" rotation="0 90 0"></a-entity>
+	
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="-5 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="2 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="9 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="16 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="23 3.35 31" rotation="0 90 0"></a-entity>
+	</a-entity>
 	
 	<!-- disabled while testing so i dont get sick of song -->
-	
+	<!--
 	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.1; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
 	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.1; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
-	
+	-->
 	<!-- temporary text -->
 	<a-entity position='0 0.5 1.45' rotation='0 180 0' n-text='text: Stop Music ; fontSize:3; width:1;'></a-entity> <!-- stop music text -->
 <!--	<a-entity position='-1 0.5 1.45' rotation='0 180 0' n-text='text: Reset Teams ; fontSize:3; width:1;'></a-entity> <!-- reset teams text -->
@@ -169,7 +200,7 @@
 		
 		<!-- inside bit -->
 			<!--<a-box n-mesh-collider="type:environment" color="black" position="16.45, 1, 0" rotation="0 0 0" scale="19.9 1 50"></a-box> -->
-			<a-entity geometry="primitive: box" position='16.45 1 0' material="src:#floor1; repeat:1 1" scale="19.9 1 50" n-mesh-collider="type:environment"></a-entity>
+			<a-entity geometry="primitive: box" position='16.45 1 0' material="src:#floor1; repeat:1 1" scale="19.9 1 60" n-mesh-collider="type:environment"></a-entity>
 		
 		<!-- shift 10 -->
 		
@@ -297,7 +328,7 @@ var playerLeft;
 
 var sim = new altspace.utilities.Simulation(); //simulation
 				
-console.log("version 0.e.8.1") //used for my reference
+console.log("version 0.e.8") //used for my reference
 //creates firebase reference
 var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");
 

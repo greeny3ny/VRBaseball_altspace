@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
+	<script src="https://greeny3ny.github.io/VRBaseball_altspace/dist/altspace.js"></script>
+	<script src="https://cdn.rawgit.com/norybiak/Aframe-gltf/v0.2.0/dist/aframe-gltf.js"></script>
+	
+	<script>
+      // n-skeleton-parent only works with root meshes at the moment. Since most model loaders use a root
+      // container object, we need to collapse the model so that n-skeleton-parent can access the mesh directly.
+         AFRAME.registerComponent('collapse-model', {
+        init: function () {
+            this.el.addEventListener('model-loaded', function () {
+                this.el.object3DMap.mesh.updateMatrixWorld();
+                var mesh;
+                this.el.object3DMap.mesh.traverse(function (obj) {
+                    if (!mesh && obj instanceof THREE.Mesh) {
+                        mesh = obj;
+                    }
+                }.bind(this))
+                if (mesh) {
+                    this.el.sceneEl.object3D.updateMatrixWorld(true);
+                    mesh.scale.copy(mesh.getWorldScale());
+                    this.el.setObject3D('mesh', mesh);
+                    // setObject3D emits this event in a-frame 0.4.0
+                    this.el.emit('object3dset', {
+                        type: 'mesh'
+                    });
+                }
+            }.bind(this));
+        }
+    });
+  </script>
+
+ <!-- firebase -->
+<script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyB9uKPr2N6JxNo7D5tzh6L62Yt4NYt6fNo",
+    authDomain: "altspace-baseball.firebaseapp.com",
+    databaseURL: "https://altspace-baseball.firebaseio.com",
+    projectId: "altspace-baseball",
+    storageBucket: "altspace-baseball.appspot.com",
+    messagingSenderId: "628420188026"
+  };
+  firebase.initializeApp(config);
+</script>
+	
+</head>
+	
+<body onload="loaded()">
+
+<!-- set up the scene -->
+<a-scene altspace="fullspace:true" sync-system='app: baseball; author: greeny3ny'>
+	
+	<!-- assets -->
+	<a-assets>
+		<a-asset-item id="bat" src="https://greeny3ny.github.io/VRBaseball_altspace/models/baseballbat.dae"></a-asset-item>
+		<a-asset-item id="blue_shirt" src="https://greeny3ny.github.io/VRBaseball_altspace/models/blue_top/shirt1.dae"></a-asset-item>
+		<a-asset-item id="red_shirt" src="https://greeny3ny.github.io/VRBaseball_altspace/models/red_top/redshirt.dae"></a-asset-item>
+		<a-asset-item id="edge" src="https://greeny3ny.github.io/VRBaseball_altspace/models/seating1/edge/edge.dae"></a-asset-item>
+		<a-asset-item id="corner" src="https://greeny3ny.github.io/VRBaseball_altspace/models/seating1/corner/stadium.dae"></a-asset-item>
+		<img id="board1" src="https://greeny3ny.github.io/VRBaseball_altspace/images/board1.png">
+		<img id="floor1" src="https://greeny3ny.github.io/VRBaseball_altspace/images/floor1.png">
+		<img id="wall2" src="https://greeny3ny.github.io/VRBaseball_altspace/images/wall2.png">
+		<img id="wall1" src="https://greeny3ny.github.io/VRBaseball_altspace/images/wall1.png">
+	</a-assets>
+	
+	
+	
+	<!-- bat pickup -->
+	<a-mixin id="bat1" collada-model="#bat" collapse-model></a-mixin>
+	<a-mixin id="blue_shirt1" collada-model="#blue_shirt" collapse-model></a-mixin>
+	<a-mixin id="red_shirt1" collada-model="#red_shirt" collapse-model></a-mixin>
+    <a-mixin id="parent-to-right-hand" position="-0.10 -0.04 -0.15" rotation="90 225 90" scale="0.3 0.36 0.3" n-skeleton-parent="part: hand; side: right;" sync sync-n-skeleton-parent></a-mixin>
+	<a-mixin id="parent-to-chest" position="-0.24 0.3 0" n-skeleton-parent="part: spine;" scale="1.1 1 1.1" sync sync-n-skeleton-parent></a-mixin>
+	<a-entity position="31 2.1 2" mixin="bat1" rotation="180 0 0" scale="0.3 0.36 0.3" instantiator="on: click;group:bat1; mixin: bat1 parent-to-right-hand"></a-entity>
+	
+	<!-- temporary bat (just a box)-->
+	<a-entity position="31 2.1 -2" n-spawner="res: interactables/box"></a-entity>
+	
+	<!-- seating -->
+	<!-- temporary while i build full baseball stadium model -->
+	<!--<a-entity position="-10 7 0" scale="1 1 1" rotation="0 90 0" collada-model="#seats" n-mesh-collider="type:environment"></a-entity> -->
+	<!-- end seating -->
+	<!-- collider issues on seating -->
+	<!--<a-entity collada-model="#corner" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="10 1 -15" rotation="0 0 0"></a-entity>-->
+	
+	<!--
+	<a-entity id="seats" position="0 0 0">
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="-5 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="2 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="9 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="16 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="23 0.55 26" rotation="0 90 0"></a-entity>
+	
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="-5 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="2 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="9 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="16 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="23 3.35 31" rotation="0 90 0"></a-entity>
+	</a-entity>
+	
+	<a-entity id="seats" position="82 0 0" rotation="0 180 0">
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="-5 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="2 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="9 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="16 0.55 26" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="23 0.55 26" rotation="0 90 0"></a-entity>
+	
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="-5 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="2 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="9 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="16 3.35 31" rotation="0 90 0"></a-entity>
+	<a-entity collada-model="#edge" n-mesh-collider="type:environment" scale="0.3 0.3 0.3" position="23 3.35 31" rotation="0 90 0"></a-entity>
+	</a-entity>
+	-->
+	<!-- disabled while testing so i dont get sick of song -->
+	<!--
+	<a-entity id="tmootbPC" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.ogg; volume: 0.1; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
+	<a-entity id="tmootbGEAR" n-sound="src:https://greeny3ny.github.io/VRBaseball_altspace/audio/tmootb.mp3; volume: 0.1; loop: false; autoplay: true;" n-skeleton-parent="part: spine"></a-entity>
+	-->
+	<!-- temporary text -->
+	<a-entity position='0 0.5 1.45' rotation='0 180 0' n-text='text: Stop Music ; fontSize:3; width:1;'></a-entity> <!-- stop music text -->
+<!--	<a-entity position='-1 0.5 1.45' rotation='0 180 0' n-text='text: Reset Teams ; fontSize:3; width:1;'></a-entity> <!-- reset teams text -->
+	<a-entity position='19.45 2 5' rotation='0 -90 0' n-text='text: Join The RecRoom Kids ; fontSize:2; width:1;'></a-entity> <!-- red team join text -->
+	<a-entity position='19.45 2 -5' rotation='0 -90 0' n-text='text: Join The Altspace Angels ; fontSize:2; width:1;'></a-entity> <!-- blue team join text -->
+	<a-entity position='19.45 2 0' rotation='0 -90 0' n-text='text: Leave Current Team ; fontSize:3; width:1;'></a-entity> <!-- leave team text -->
+	
+	<a-entity position='31 2.5 -2' rotation='0 -90 0' n-text='text: Temporary Bat ; fontSize:2; width:1;'></a-entity> <!-- temp text -->
+	<!-- temp text end -->
+	
+	<!-- shirt displays -->
+	<a-entity collada-model="#blue_shirt" position='20 3 -5' rotation='0 0 0' scale = "1.2 1.2 1.2" >
+		<a-animation attribute="rotation" dur="10000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
+	</a-entity> 
+	<a-entity collada-model="#red_shirt" position='20 3 5' rotation='0 0 0' scale = "1.2 1.2 1.2" >
+		<a-animation attribute="rotation" dur="10000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
+	</a-entity> 
+	
+	<a-entity id="s_blue" position="20 2 -5" rotation="0 0 0" scale="1 1 1" instantiator="on: equip_s;group:blue_shirt1; mixin: blue_shirt1 parent-to-chest"></a-entity>
+	<a-entity id="s_red"position="20 2 5" rotation="0 0 0" scale="1 1 1" instantiator="on: equip_s;group:red_shirt1; mixin: red_shirt1 parent-to-chest"></a-entity>
+	<!-- shirt displays end -->
+	
+	
+	<!-- scoreboard -->
+	<a-entity class="scoreboard" scale="1 2 2" position="5 0 0" n-mesh-collider="type:hologram">
+		<a-entity position='90 15 0' rotation='0 -90 0' n-text='text: Craigs Baseball! ;'></a-entity>
+		
+		<!-- red team text -->
+		<a-entity id="redTeam-text" position='90 20 15' rotation='0 -90 0' n-text='text: RecRoom Kids Score : ;'></a-entity>
+		<a-entity id="redTeam-players" position='90 16 15' rotation='0 -90 0' n-text='text: RecRoom Kids Players: ;' ></a-entity>
+		
+		<!-- blue team text -->
+		<a-entity id="blueTeam-text" position='90 20 -15' rotation='0 -90 0' n-text='text: Altspace Angels Score : ;'></a-entity>
+		<a-entity id="blueTeam-players" position='90 16 -15' rotation='0 -90 0' n-text='text: Altspace Angels Players : ;' ></a-entity>
+		
+		<!-- game info text -->
+		<a-entity id="strikes" position="90 11 0" rotation="0 -90 0" n-text="text: Strikes: ;" ></a-entity>
+		<a-entity id="outs" position="90 10 0" rotation="0 -90 0" n-text="text: Outs: ;" ></a-entity>
+		
+		<a-box position='92 14 0' color="black" scale="0.1 20 20"></a-box>
+		
+		<a-box id="sb-base1" position='91 14 6' color="white" scale="2 2 2" sync sync-color>
+			<a-animation attribute="material.color" begin="basetouch" from="white" to="yellow" dur="1"></a-animation>
+			<a-animation attribute="material.color" begin="baseleft" from="yellow" to="white" dur="1"></a-animation>
+		</a-box> <!-- base1scoreboard -->
+		
+		<a-box id="sb-base2" position='91 20 0' color="white" scale="2 2 2" sync sync-color>
+			  <a-animation attribute="material.color" begin="basetouch" from="white" to="yellow" dur="1"></a-animation>
+			  <a-animation attribute="material.color" begin="baseleft" from="yellow" to="white" dur="1"></a-animation>
+		</a-box> <!-- base2scoreboard -->
+		
+		<a-box id="sb-base3" position='91 14 -6' color="white" scale="2 2 2" sync sync-color>
+			<a-animation attribute="material.color" begin="basetouch" from="white" to="yellow" dur="1"></a-animation>
+			<a-animation attribute="material.color" begin="baseleft" from="yellow" to="white" dur="1"></a-animation>
+		</a-box> <!-- base3scoreboard -->
+		
+		<a-box id="sb-base0" position='91 7 0' color="white" scale="2 2 2" sync sync-color>
+			  <a-animation attribute="material.color" begin="basetouch" from="white" to="yellow" dur="1"></a-animation>
+			  <a-animation attribute="material.color" begin="baseleft" from="yellow" to="white" dur="1"></a-animation>
+		</a-box> <!-- base0scoreboard -->
+		
+		<a-image src="#board1" position="91 15 0" rotation="0 90 0" scale="20 20"></a-image>
+	</a-entity>
+	
+	<!-- ground -->
+	<a-plane n-mesh-collider="type:environment; convex: false" position="0, 0, 0" width="500" height="500" color="#0FD" rotation="-90 0 0"></a-plane>
+	
+	<!-- baseball -->
+	<a-entity position="38 3 0" n-spawner='res: interactables/basketball'></a-entity>
+	
+	<!--<a-entity position="0 1 0" n-object='res: effects/fireworks'></a-entity>-->
+	
+		<!-- basic layout -->
+		
+		<!-- ramp -->
+		<a-box n-mesh-collider="type:environment" color="blue" position="2.5, 0.5, 0" rotation="0 0 108.44" scale="0 6.325 5"></a-box>
+		
+		<!-- inside bit -->
+			<!--<a-box n-mesh-collider="type:environment" color="black" position="16.45, 1, 0" rotation="0 0 0" scale="19.9 1 50"></a-box> -->
+			<a-entity geometry="primitive: box" position='16.45 1 0' material="src:#floor1; repeat:1 1" scale="19.9 1 60" n-mesh-collider="type:environment"></a-entity>
+		
+		<!-- shift 10 -->
+		
+		<!-- field -->
+		<a-box n-mesh-collider="type:environment" color="#1F4" position="48.9, 1, 0" rotation="0 0 0" scale="45 1 49"></a-box> <!-- baseplate -->
+		<a-cylinder n-mesh-collider="type:environment" color="#1F4" height="1" radius="25" position="67 1 0"></a-cylinder> <!-- outfield -->
+		<a-cylinder color="#c48f70" height="1" radius="14" position="45 1.002 0"></a-cylinder> <!-- infield -->
+		
+		<!-- used to make it look like actual baseball field -->
+		<a-box color="#1F4" position="42 1 0" rotation="0 45 0" scale="13 1.01 13"></a-box> 
+		<a-box color="#1F4" position="38.5 1 11" rotation="0 45 0" scale="4 1.03 22"></a-box>
+		<a-box color="#1F4" position="38.5 1 -11" rotation="0 -45 0" scale="4 1.03 22"></a-box>
+		
+		<!-- diamond -->
+			<a-box n-mesh-collider="type:hologram" color="white" position="32, 1.1, 0" rotation="0 0 0" scale="1 1 1"></a-box> <!-- home -->
+			<a-cylinder n-mesh-collider="type:environment" color="#c48f70" height="1" radius="3.75" position="32 1.02 0"></a-cylinder> <!-- home dirt -->
+			
+			<!-- foul / running lines -->
+			<a-box n-mesh-collider="type:hologram" color="yellow" position="37, 1.1, 5" rotation="0 45 0" scale="1 1 12"></a-box>
+			<a-box n-mesh-collider="type:hologram" color="yellow" position="47, 1.1, 5" rotation="0 135 0" scale="1 1 12"></a-box> 
+			<a-box n-mesh-collider="type:hologram" color="yellow" position="37, 1.1, -5" rotation="0 135 0" scale="1 1 12"></a-box>
+			<a-box n-mesh-collider="type:hologram" color="yellow" position="47, 1.1, -5" rotation="0 45 0" scale="1 1 12"></a-box>
+			<a-box n-mesh-collider="type:hologram" color="yellow" position="49, 1.1, -17" rotation="0 135 0" scale="1 1 18"></a-box>
+			<a-box n-mesh-collider="type:hologram" color="yellow" position="49, 1.1, 17" rotation="0 45 0" scale="1 1 18"></a-box>
+			<!-- --- -->
+
+			<a-cylinder color="#c48f70" height="1" radius="1" position="38 1.1 0"></a-cylinder> <!-- pitchers stump -->
+			
+			<a-cylinder color="#c48f70" height="1" radius="2" position="52 1.01 0"></a-cylinder> <!-- base2 dirt -->
+			<a-cylinder color="#c48f70" height="1" radius="2" position="42 1.01 10"></a-cylinder> <!-- base1 dirt -->
+			<a-cylinder color="#c48f70" height="1" radius="2" position="42 1.01 -10"></a-cylinder> <!-- base3 dirt -->
+			
+			<a-box n-mesh-collider="type:hologram" color="white" position="42, 1.1, 10" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base1 -->
+			<a-box n-mesh-collider="type:hologram" color="white" position="52, 1.1, 0" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base2 -->
+			<a-box n-mesh-collider="type:hologram" color="white" position="42, 1.1, -10" rotation="0 45 0" scale="1 1 1"></a-box> <!-- base3 -->
+			
+			 
+			<a-box id="home_collider" base_collision="box_id:0;"n-mesh-collider="type:hologram" color="white" position="32, 3, 0" rotation="0 0 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabled: false"></a-box> <!-- home collider-->
+			<a-box id="base1_collider" base_collision="box_id:1;" n-mesh-collider="type:hologram" color="white" position="42, 3, 10" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base1 collider -->
+			<a-box id="base2_collider" base_collision="box_id:2;" n-mesh-collider="type:hologram" color="white" position="52, 3, 0" rotation="0 45 0" scale="2 3 2" opacity="0.5" altspace-cursor-collider="enabled: false"></a-box> <!-- base2 collider -->
+			<a-box id="base3_collider" base_collision="box_id:3;" n-mesh-collider="type:hologram" color="white" position="42, 3, -10" rotation="0 45 0" scale="2 3 2" opacity="0.5"  altspace-cursor-collider="enabaled: false"></a-box> <!-- base3 collider -->
+      
+		<!-- borders -->
+		
+			<a-box n-mesh-collider="type:environment" color="grey" position="6, 0.5, 0" rotation="0 0 0" scale="1 2 50"></a-box>
+			<a-box n-mesh-collider="type:environment" color="orange" position="6, 3, 2.9" rotation="0 0 0" scale="1 3 1"></a-box>
+			<a-box n-mesh-collider="type:environment" color="orange" position="6, 3, -2.9 rotation="0 0 0" scale="1 3 1"></a-box>
+			<a-entity position="5.5 4 -3" n-object='res: effects/sparkler'></a-entity>
+			<a-entity position="5.5 4 3" n-object='res: effects/sparkler'></a-entity>
+			
+			<!-- walls -->
+			<a-box n-mesh-collider="type:environment" src="#wall1" position="6.1, 2.8, -5" rotation="0 0 20" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall2" position="6.1, 2.8, -10" rotation="0 0 20" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall2" position="5.25, 5.85, -5" rotation="0 0 10" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall1" position="5.25, 5.85, -10" rotation="0 0 10" scale="0.1 3.2 5"></a-box>
+			
+			<a-box n-mesh-collider="type:environment" src="#wall1" position="6.1, 2.8, -15" rotation="0 0 20" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall2" position="6.1, 2.8, -20" rotation="0 0 20" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall2" position="5.25, 5.85, -15" rotation="0 0 10" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall1" position="5.25, 5.85, -20" rotation="0 0 10" scale="0.1 3.2 5"></a-box>
+			
+			<!-- end walls -->
+			
+			
+			<!-- temporary -->
+			<a-box n-mesh-collider="type:environment" src="#wall1" position="6.1, 2.8, 5" rotation="0 0 20" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall2" position="6.1, 2.8, 10" rotation="0 0 20" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall2" position="5.25, 5.85, 5" rotation="0 0 10" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall1" position="5.25, 5.85, 10" rotation="0 0 10" scale="0.1 3.2 5"></a-box>
+			
+			<a-box n-mesh-collider="type:environment" src="#wall1" position="6.1, 2.8, 15" rotation="0 0 20" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall2" position="6.1, 2.8, 20" rotation="0 0 20" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall2" position="5.25, 5.85, 15" rotation="0 0 10" scale="0.1 3.2 5"></a-box>
+			<a-box n-mesh-collider="type:environment" src="#wall1" position="5.25, 5.85, 20" rotation="0 0 10" scale="0.1 3.2 5"></a-box>
+			
+			<!-- temporary -->
+			
+			
+			
+			
+			
+			<!--<a-box n-mesh-collider="type:environment" color="grey" position="11, 0.5, -20" rotation="0 -45 0" scale="1 2 14.142"></a-box>-->
+			<!--<a-box n-mesh-collider="type:environment" color="grey" position="11, 0.5, -20" rotation="0 -45 0" scale="1 2 14.142"></a-box>-->
+			<a-box n-mesh-collider="type:environment" color="green" position="50.4, 1.5, -25" rotation="0 90 0" scale="1 2 48"></a-box>
+			<a-box n-mesh-collider="type:environment" color="green" position="50.4, 1.5, 25" rotation="0 90 0" scale="1 2 48"></a-box>
+			<a-box n-mesh-collider="type:environment" color="green" position="91.75, 1.5, 0" rotation="0 90 0" scale="12 2 1"></a-box>
+			
+			<a-box n-mesh-collider="type:environment" color="green" position="80.5, 1.5, -20" rotation="0 60 0" scale="1 2 20"></a-box>
+			<a-box n-mesh-collider="type:environment" color="green" position="89.5, 1.5, -10" rotation="0 30 0" scale="1 2 17"></a-box>
+			<a-box n-mesh-collider="type:environment" color="green" position="80.5, 1.5, 20" rotation="0 -60 0" scale="1 2 20"></a-box>
+			<a-box n-mesh-collider="type:environment" color="green" position="89.5, 1.5, 10" rotation="0 -30 0" scale="1 2 17"></a-box>
+		
+		<!-- homerun horn -->
+		<a-entity id="hornPC" sync="own-on:homerun" sync-n-sound n-sound="on:homerun; src:https://greeny3ny.github.io/VRBaseball_altspace/audio/horn1.ogg; volume: 0.1; loop: false; autoplay: false;" n-skeleton-parent="part: spine"></a-entity>
+		<a-entity id="hornGEAR" sync="own-on:homerun" sync-n-sound n-sound="on:homerun; src:https://greeny3ny.github.io/VRBaseball_altspace/audio/horn1.mp3; volume: 0.1; loop: false; autoplay: false;" n-skeleton-parent="part: spine"></a-entity>
+		
+		<a-entity position="0 2 0" rotation="0 90 0" scale="3 3 3" n-layout-browser="url: https://video-jukebox.firebaseapp.com/"></a-entity>
+	<!--https://video-jukebox.firebaseapp.com/-->
+	
+
+</a-scene>
+ 
+ 
+</body>
+
+<script>
+//init vars
+var scene = document.querySelector('a-scene');
+var last_base = 9; //used to work out if player has hit all 3 bases
+var user; //stores username
+var red_runs = 0; //red runs (synced using firebase)
+var red_players = ["---"]; //synced
+var blue_runs = 0; //synced
+var blue_players = ["---"]; //synced
+var inSession = ["---"]; //array stores everybody in current session
+var team = "N"; //synced variable to track what team player is in
+var fireworks = document.createElement('a-entity');
+
+fireworks.setAttribute('position', '32, 2, 0');
+fireworks.setAttribute('n-object', 'res:effects/fireworks');
+
+var heartbeat = 0; //players "heartbeat"
+var player_index = 0; //index of player in inSession array
+var playerLeft; //stores temp value of player that lefts name
+var playerLeftTeam = "N"; //stores temp value of player that lefts team
+
+var sim = new altspace.utilities.Simulation(); //simulation
+
+//0.experimental.hearbeat.2
+console.log("version 0.e.h.2") //used for my reference
+//creates firebase reference
+var myFirebaseRef = new Firebase("https://altspace-baseball.firebaseio.com/");
+
+//check for client joining
+scene.addEventListener('clientjoined', handlePlayerJoin);
+
+//-----gets first player in instance (hopefully)--------
+var sim = new altspace.utilities.Simulation();
+var config = { authorId: 'Greeny3ny', appId: 'VRBaseball' };
+var sceneSync;
+var enclosure;
+
+console.log(altspace.getSpace());
+
+//Get the enclosure
+altspace.getEnclosure().then(function(e) {
+	enclosure = e;
+	//Connect to sync server
+	altspace.utilities.sync.connect(config).then(function(connection) {
+	//Retrieve SceneSync
+	sceneSync = new altspace.utilities.behaviors.SceneSync(connection.instance, {
+		ready: ready//Ready!
+	});
+	//Add SceneSync to the scene
+	sim.scene.addBehavior(sceneSync);
+	});
+});
+							
+function ready(firstInstance) {
+	if (firstInstance) {
+		console.log("first player");
+		//reset();
+		console.log("reset variables");
+	}
+}//end ready
+//------------------
+
+function handlePlayerJoin(event){
+}
+
+//check for client leaving
+scene.addEventListener('clientleft', handlePlayerLeave);
+function handlePlayerLeave(event){
+
+}
+//gets username of joined player
+function getUser1(){
+	
+	altspace.getUser().then(function(user1){
+		user = user1.displayName;
+		//sets timeout to deal with latency issues - kinda works
+		setTimeout(addToSession, 2000); 
+	});
+	
+}
+getUser1();
+
+
+
+function heartBeat(){
+
+	//updates heartbeat and adds to database every 2 seconds
+
+	heartbeat ++;
+	//console.log(heartbeat);
+	
+	inSession[player_index] = user + " " + heartbeat + " " + team;
+	
+	updateHeartbeat();
+
+}
+
+	var tempArray = []; //creates temp array
+	//var tempArray2 = [];
+//checks if a player is still in the game
+function checkHeartbeat(){
+	
+
+	//read database once then again after 10 seconds
+	//if value hasnt changed, remove player
+	
+	//read database
+	//timeout 10 seconds
+	//read database again
+	//if values have not changed, remove players
+
+	readInSession(); //reads inSession
+	tempArray = inSession;
+	
+	//console.log("checking heartbeats");
+	setTimeout(test, 3000);
+	
+}
+
+function test(){
+
+	console.log("5 seconds passed");
+	readInSession();
+	console.log(tempArray + " | " + inSession);
+	for (var i = 0; i< inSession.length; i++){
+			console.log(i);
+			if (tempArray[i] == inSession[i]){
+				//inSession[i] = "ZZZ--";
+				console.log("removed from position " + i);
+				
+				//works but is kinda buggy
+				//does it in steps, not all at once?
+				if (player_index > i){player_index --;}
+				
+				var temp = inSession[i].split(" ");
+				//console.log("temp :" + temp);
+				playerLeft = temp[0];
+				playerLeftTeam = temp[2];
+				
+				checkPlayers();
+				
+				inSession.splice(i, 1);
+
+			}
+	
+		}
+		updateHeartbeat();
+}
+
+//used to check what team left player was on
+function checkPlayers(){
+
+	//check red team
+	if (playerLeftTeam == "red"){
+		for (var i = 0; i<red_players.length; i++){
+				if (red_players[i] == playerLeft){
+				
+					if (red_players.length == 1){
+						red_players[0] = "---";
+					} else { red_players.splice(i,1); }
+				
+					console.log("player " + playerLeft + " removed from red team");
+				}
+		}
+	}
+	
+	//check blue team
+	if (playerLeftTeam == "blue"){
+		for (var i = 0; i<blue_players.length; i++){
+				if (blue_players[i] == playerLeft){
+				
+					if (blue_players.length == 1){
+						blue_players[0] = "---";
+					} else { blue_players.splice(i,1); }
+				
+					console.log("player " + playerLeft + " removed from blue team");
+				}
+		}
+	}
+	
+	if (playerLeftTeam == "N"){ console.log("player " + playerLeft + " was not in a team")}
+	
+	updateFirebase();
+}
+
+
+//sets red_runs up with value from database
+function readRuns(){
+	myFirebaseRef.child("redTeam/runs").on("value", function(snapshot) {
+		//console.log(snapshot.val());
+		red_runs = snapshot.val();
+	});
+	myFirebaseRef.child("blueTeam/runs").on("value", function(snapshot) {
+		//console.log(snapshot.val());
+		blue_runs = snapshot.val();
+	});
+	
+	console.log("rs:"+red_runs + " | bs:"+blue_runs);
+}//end read runs
+
+//sets *_players up with values from database
+function readPlayers(){
+	myFirebaseRef.child("redTeam/players").on("value", function(snapshot) {
+		red_players = snapshot.val();
+		//console.log("rp: " + red_players);
+	});
+	
+	myFirebaseRef.child("blueTeam/players").on("value", function(snapshot) {
+		blue_players = snapshot.val();
+		//console.log("bp: " + blue_players);
+	});
+	
+	readInSession();
+	
+	console.log(inSession.length + " people in session | rp: " + red_players + " | bp: " + blue_players);
+	//console.log("players in session : " + inSession);
+}//end read players
+
+function readInSession(){
+
+	myFirebaseRef.child("inSession").on("value", function(snapshot){
+		inSession = snapshot.val();
+		//console.log(inSession);
+	});
+
+}
+
+//updates database
+function updateFirebase(){
+	myFirebaseRef.update({
+		redTeam: {
+			runs: red_runs,
+			players: red_players
+		},
+		blueTeam: {
+			runs: blue_runs,
+			players: blue_players
+		},
+		inSession: inSession
+	});
+}
+
+function updateHeartbeat(){
+
+	myFirebaseRef.update({
+		inSession: inSession
+	});
+	
+}
+
+function reset(){
+	
+	red_runs = 0; //red runs (synced using firebase)
+	red_players = ["---"]; //synced
+	blue_runs = 0; //synced
+	blue_players = ["---"]; //synced
+	inSession = ["---"]; //array stores everybody in current session
+	
+	updateFirebase(); //update database
+}
+
+//adds current user to session
+function addToSession(){
+
+	if (inSession[0] == "---"){
+		inSession[0] = user + " " + heartbeat + " " + team;
+		player_index = 0;
+	} else {
+		inSession.push(user + " " + heartbeat + " " + team);
+		player_index = inSession.length - 1; //might cause issues
+	}//end if
+	console.log(user + " added to current session in position " + player_index);
+	//console.log(inSession);
+	setInterval(heartBeat, 1000);
+	setInterval(checkHeartbeat, 5000);
+	updateFirebase();
+}
+
+//--- function calls ---
+readRuns(); //reads runs
+readPlayers(); //reads players
+
+//doesnt need to update after a read
+//updateFirebase(); //updates database
+//----------------------
+
+
+//used to end homerun fireworks
+function endFireworks(){
+	console.log("fireworks ended");
+	scene.remove(fireworks);
+}//end endFireworks
+
+//updates scoreboard every 0.2 seconds
+setInterval(updateScoreBoard, 200);
+//make scoreboard more like baseball scoreboard?
+//updates scoreboard
+function updateScoreBoard(){
+	document.querySelector('#redTeam-text').setAttribute('n-text','fontSize: 10; text: RecRoom Kids Score: ' + red_runs + " Runs");
+	document.querySelector('#redTeam-players').setAttribute('n-text','text: RecRoom Kids Players: ' + red_players);
+	
+	document.querySelector('#blueTeam-text').setAttribute('n-text','fontSize: 10; text: Altspace Angels Score: ' + blue_runs + " Runs");
+	document.querySelector('#blueTeam-players').setAttribute('n-text','text: Altspace Angels Players: ' + blue_players);
+}//end updateScoreBoard
+
+//unequip shirts
+function removeShirt(){
+	if (teamJoined == true ){
+		if (team == "blue"){
+			document.querySelector('#s_blue').emit('equip_s');
+		}else if (team == "red"){
+			document.querySelector('#s_red').emit('equip_s');
+		}
+	}
+}//end remove shirt
+
+//base collision aframe component code
+AFRAME.registerComponent('base_collision',
+                         {
+  schema:  //does stuff
+  { 
+    jointCubeSize: {
+      type: 'float',
+      default: 0.275
+    },
+	box_id:
+	{
+		type: 'int'
+	}
+  },
+  init: function ()
+  {
+    var self = this;
+    var object = self.el.object3D;
+	
+    object.addBehavior(new altspace.utilities.behaviors.JointCollisionEvents
+                       ({
+      joints: [['Head', 'Center', 0]], jointCubeSize: self.data.jointCubeSize
+    }));
+	
+	//joints enter
+    object.addEventListener('jointcollisionenter', handleJoin);		
+    function handleJoin(event)
+    {
+	    if(self.data.box_id == 0){
+		
+			document.querySelector('#sb-base0').emit('basetouch'); //change board
+		
+			if (last_base == 3){ //if last base was base 3, then homerun
+				console.log('homerun');
+				
+				//sound horns
+				document.querySelector('#hornGEAR').emit('homerun');
+				document.querySelector('#hornPC').emit('homerun');
+				
+				scene.appendChild(fireworks);
+				setTimeout(endFireworks, 6000);
+				
+				//updates correct teams runs
+				if (team == "red"){
+					red_runs ++;
+				}else if( team == "blue"){
+					blue_runs ++;
+				}
+				
+				//update firebase
+				updateFirebase();
+				
+				console.log("red runs = " + red_runs);
+				
+			}//end last_base
+			
+			//KEEP THIS LAST
+			last_base = 0; //last base touched was home
+		}//end base0 
+		else if(self.data.box_id == 1){
+			
+			document.querySelector('#sb-base1').emit('basetouch'); //change board
+			if (last_base == 0){ //if last base touched was home, the new last base is b1
+				last_base = 1;
+			}
+			
+		}//end base1
+		else if(self.data.box_id == 2){
+		
+			document.querySelector('#sb-base2').emit('basetouch'); //change board
+			
+			if (last_base == 1){ //if last base touched was b1, the new last base is b2
+				last_base = 2;
+			}
+			
+		}//end base2
+		else if(self.data.box_id == 3){
+			
+			document.querySelector('#sb-base3').emit('basetouch');
+			
+			if (last_base == 2){ //if last base touched was b2, the new last base is b3
+				last_base = 3;
+			}
+			
+		}//end base3
+		
+		
+    }// end function handle join
+	
+	//joint collision leave
+    object.addEventListener('jointcollisionleave', handleLeave);
+    function handleLeave(event)
+    {
+		//slight issue here - if 2 people enter then one leaves, board will go white - need to use n-container
+		if(self.data.box_id == 0){
+			document.querySelector('#sb-base0').emit('baseleft');
+		}
+		else if(self.data.box_id == 1){
+			document.querySelector('#sb-base1').emit('baseleft');
+		}
+		else if(self.data.box_id == 2){
+			document.querySelector('#sb-base2').emit('baseleft');
+		}
+		else if(self.data.box_id == 3){
+			document.querySelector('#sb-base3').emit('baseleft');
+		}
+	
+    }//end function handle leave
+  }
+}); //end base collision
+
+
+//control boxes
+//--- materials ---
+var redMat = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+var red2Mat = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+var blueMat = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+var stopSoundMat = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+//-----------------
+//box geometry
+var boxGeo = new THREE.BoxGeometry(1, 1, 1);
+//--- boxes ---
+var redTeamJoinBox = new THREE.Mesh(boxGeo, redMat);
+var resetBox = new THREE.Mesh(boxGeo, red2Mat);
+var stopSoundBox = new THREE.Mesh(boxGeo, stopSoundMat);
+var blueTeamJoinBox = new THREE.Mesh(boxGeo, blueMat);
+var leaveTeamBox = new THREE.Mesh(boxGeo, red2Mat);
+//-------------
+
+//set box positions
+redTeamJoinBox.position.set(20, 2, 5);
+blueTeamJoinBox.position.set(20, 2, -5);
+resetBox.position.set(-1, 0.5 , 2);
+stopSoundBox.position.set(0, 0.5, 2);
+leaveTeamBox.position.set(20, 2, 0);
+//-----
+
+var teamJoined = false; //local var used to check if player has joined a team
+redTeamJoinBox.addEventListener('cursordown', function(){
+	//only adds player once
+	if (teamJoined == false){
+		console.log("red team joined");
+		teamJoined = true; //only adds name once
+		team = "red";
+		inSession[player_index] = inSession[player_index] + " " + team;
+		//pray noone is called "---"
+		//checks if anyone is in team, removes blank value and adds player
+		console.log(red_players[0]);
+		if (red_players[0] == "---"){
+			red_players[0] = user;
+		} else {
+			red_players.push(user); //adds player to redteam
+		}
+		
+		document.querySelector('#s_red').emit('equip_s'); //equips player shirt
+		
+	}
+	
+	updateFirebase();
+	
+}); //end red team join click
+//blueteamjoin click
+blueTeamJoinBox.addEventListener('cursordown', function(){
+	//update team number value
+	
+	//only adds player once
+	if (teamJoined == false){
+		console.log("blue team joined");
+		teamJoined = true; //only adds name once
+		team = "blue";
+		
+		inSession[player_index] = inSession[player_index] + " " + team;
+		
+		//pray noone is called "---"
+		//checks if anyone is in team, removes blank value and adds player
+		console.log(blue_players[0]);
+		if (blue_players[0] == "---"){
+			blue_players[0] = user;
+		} else {
+			blue_players.push(user); //adds player to redteam
+		}
+		
+		document.querySelector('#s_blue').emit('equip_s');
+		
+	}
+	
+	updateFirebase();
+	
+}); //end blue team join click
+//temporary?	- breaks alot of things
+resetBox.addEventListener('cursordown', function(){
+	console.log("reset");
+	
+	//not synced
+	removeShirt(); // do this before teamJoined and team=""
+	
+	teamJoined = false; //reset clicked value
+	
+	//reset players value to default "tim"
+	red_players = ["---"];
+	blue_players = ["---"];
+	inSession= ["---"]; //temp
+	team = "";
+
+	//update database
+	updateFirebase();
+	
+});
+//leave team box click
+leaveTeamBox.addEventListener('cursordown', function(){
+	console.log("leave team");
+	
+	removeShirt();
+	
+	if (team=="red"){
+		var i = red_players.indexOf(user);
+		if (i != -1){
+			red_players.splice(i, 1);
+		}
+	}else if (team=="blue"){
+		var i = blue_players.indexOf(user);
+		if (i != -1){
+			blue_players.splice(i, 1);
+		}
+	}
+	
+	//checks if array is empty and pushes in placeholder value
+	if (red_players.length == 0){red_players.push("---");}
+	if (blue_players.length == 0){blue_players.push("---");}
+	
+	teamJoined = false;
+	team = "N";
+	
+	//update database
+	updateFirebase();
+	
+});
+//stop sound button
+stopSoundBox.addEventListener('cursordown', function(){
+	console.log("stop sound");
+	document.querySelector('#tmootbGEAR').setAttribute('n-sound', 'volume: 0');
+	document.querySelector('#tmootbPC').setAttribute('n-sound', 'volume: 0');
+});
+//add boxes to scene
+sim.scene.add(blueTeamJoinBox);
+sim.scene.add(stopSoundBox);
+sim.scene.add(redTeamJoinBox);
+sim.scene.add(resetBox);
+sim.scene.add(leaveTeamBox);
+
+//moves document - kinda dodgy
+loaded();
+//does this function once everything has loaded in
+function loaded(){
+
+	//move document so baseball does not collide
+	altspace.getDocument().then(function (document) { document.position.set(100, 100, 100); document.rotation.set(0, 90, 0);});
+	console.log("loaded");
+}
+</script>
+
+
+</html>

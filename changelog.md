@@ -36,3 +36,8 @@ Version 0.1.e.5:
     - When a new player joins for the first time database is reset? (i think)
       - Not supposed to happen
 
+Version 0.e.h.2:
+  - Heartbeat system added
+    - Players now join with a heartbeat, if server does not recieve heartbeat, player is removed from game
+    - Should now allow players to be removed from team when they leave
+
